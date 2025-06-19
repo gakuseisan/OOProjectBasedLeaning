@@ -9,13 +9,17 @@ namespace OOProjectBasedLeaning
 
             InitializeComponent();
 
-            // 従業員の作成
-            new EmployeeCreatorForm().Show();
+            // 先に HomeForm を作る
+            HomeForm homeForm = new HomeForm();
 
-            // 家
-            new HomeForm().Show();
+            // HomeForm を EmployeeCreatorForm に渡す
+            EmployeeCreatorForm creatorForm = new EmployeeCreatorForm(homeForm);
 
-            // 会社
+            // 表示
+            homeForm.Show();
+            creatorForm.Show();
+
+            // 会社フォーム
             new CompanyForm().Show();
 
         }
