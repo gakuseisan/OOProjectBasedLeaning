@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Data.SqlClient;
 
 namespace OOProjectBasedLeaning
 {
@@ -243,6 +244,19 @@ namespace OOProjectBasedLeaning
 
         }
 
+
+
+        //static void Main()
+        //{
+            //string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=OOProjectBasedLeaning;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+            //try
+            //{
+                //using (SqlConnection connection = new Sqlconection(connectionString))
+                //{
+                    //connection.Open();
+                //}
+            //}
+        //}
     }
 
 }
