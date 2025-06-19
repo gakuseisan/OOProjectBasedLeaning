@@ -36,10 +36,14 @@ namespace OOProjectBasedLeaning
             Label titleLabel = new Label()
             {
                 Text = "出退勤ボタン",
-                Size = new Size(20, 20),
-                BackColor = Color.Blue
+                Font = new Font("Arial",14,FontStyle.Bold),
+                Dock = DockStyle.Top,
+                TextAlign = ContentAlignment.MiddleCenter
                 
             };
+            Controls.Add(titleLabel);
+
+
     
         }
 
