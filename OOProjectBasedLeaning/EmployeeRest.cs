@@ -1,10 +1,10 @@
 namespace OOProjectBasedLeaning
 {
 
-    public partial class Form1 : Form
+    public partial class EmployeeRest : Form
     {
 
-        public Form1()
+        public EmployeeRest()
         {
 
             InitializeComponent();
