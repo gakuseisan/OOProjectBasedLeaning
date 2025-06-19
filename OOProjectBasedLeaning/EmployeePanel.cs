@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.Xml.Serialization;
 namespace OOProjectBasedLeaning
 {
 
-    public class EmployeePanel : Panel
+    public class EmployeePanel : DragDropPanel
     {
 
         private Employee employee;
@@ -43,9 +44,14 @@ namespace OOProjectBasedLeaning
             Controls.Add(employeeNameLabel);
             Controls.Add(guestNameTextBox);
 
-
         }
 
+        protected override void OnPanelMouseDown()
+        {
+            DoDragDropMove();
+
+
+        }
     }
 
 }
