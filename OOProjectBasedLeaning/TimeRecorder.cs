@@ -1,6 +1,4 @@
-﻿using OOProjectBasedLeaning;
-using System;
-using System.Text;
+﻿using System;
 using System.Windows.Forms;
 
 namespace OOProjectBasedLeaning
@@ -8,36 +6,41 @@ namespace OOProjectBasedLeaning
     internal class TimeRecorder : IDisposable
     {
         private System.Windows.Forms.Timer timer;
+        public string CurrentDateTime { get; private set; }
 
-        public string CurrentTime { get; private set; }
-        public string CurrentDate { get; private set; }
-
-        public event Action<string> TimeUpdated;
-        public event Action<string> DateUpdated;
+        private Label boundTimeLabel;
 
         public TimeRecorder()
         {
             timer = new System.Windows.Forms.Timer();
-            timer.Interval = 1000; // 1秒
+            timer.Interval = 1000;
             timer.Tick += OnTimedEvent;
-
             UpdateTime();
         }
 
         private void OnTimedEvent(object sender, EventArgs e)
         {
             UpdateTime();
+            UpdateBoundLabel();
         }
 
         private void UpdateTime()
         {
             DateTime now = DateTime.Now;
+            CurrentDateTime = now.ToString("yyyy/MM/dd HH:mm:ss");
+        }
 
-            CurrentTime = now.ToString("HH:mm:ss");
-            CurrentDate = now.ToString("yyyy/MM/dd (ddd)");
+        public void BindClock(Label timeLabel)
+        {
+            boundTimeLabel = timeLabel;
+            if (boundTimeLabel != null)
+                boundTimeLabel.Text = CurrentDateTime;
+        }
 
-            TimeUpdated?.Invoke(CurrentTime);
-            DateUpdated?.Invoke(CurrentDate);
+        private void UpdateBoundLabel()
+        {
+            if (boundTimeLabel != null)
+                boundTimeLabel.Text = CurrentDateTime;
         }
 
         public void Start() => timer.Start();
@@ -49,6 +52,7 @@ namespace OOProjectBasedLeaning
         }
     }
 }
+
 
 //前提宣言
 //private TimeRecorder recorder;
