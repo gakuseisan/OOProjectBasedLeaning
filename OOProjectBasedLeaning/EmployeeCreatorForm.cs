@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace OOProjectBasedLeaning
 {
-    public static class AppConstants
-    {
-        public const int Xmargin = 70; // 横余白 
-        public const int Ymargin = 50; // 上余白 
-        public const int CellSize_height = 60; // グリッド間隔
-        public const int emp_width = 200; // 従業員パネルの幅
-        public const int emp_height = 10; // 従業員パネルの高さ
-    }
-    public partial class EmployeeCreatorForm : DragDropForm
+
+    public partial class EmployeeCreatorForm : Form
     {
         private int employeeId = 10000;
 
@@ -20,126 +14,128 @@ namespace OOProjectBasedLeaning
         {
             InitializeComponent();
             this.AllowDrop = false;
+
+            gridBoard.ColumnStyles.Clear();
+            gridBoard.RowStyles.Clear();
+
+            gridBoard.ColumnCount = 1;//列数(横)
+            gridBoard.RowCount = 10;  //行数(縦)
+
+            gridBoard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            for (int i = 0; i < gridBoard.RowCount; i++)
+                gridBoard.RowStyles.Add(new RowStyle(SizeType.Absolute, AppConstants.CellSize_height));
+
+            gridBoard.DragEnter += GridBoard_DragEnter;
+            gridBoard.DragDrop += GridBoard_DragDrop;
         }
 
         private void CreateGuestEvent(object sender, EventArgs e)
         {
             var newEmployee = CreateEmployee();
-
-            //従業員パネルのあれこれ
-            EmployeePanel newEmployeePanel = new EmployeePanel(newEmployee)
+            var newPanel = new EmployeePanel(newEmployee)
             {
-                Location = new Point(
-                    AppConstants.Xmargin, 
-                    AppConstants.Ymargin + (employeeId - 10001) * AppConstants.CellSize_height
-                    ),
-                Width = AppConstants.emp_width,
-                Height = AppConstants.CellSize_height - AppConstants.emp_height,
-                BackColor = Color.LightBlue
+                Width = AppConstants.emp_width,           
+                Height = AppConstants.CellSize_height,   
+                BackColor = Color.LightBlue,             
+                Margin = new Padding(AppConstants.Xmargin, AppConstants.Ymargin, 0, 0)
             };
 
-            boardPanel.Controls.Add(newEmployeePanel);
-            newEmployeePanel.BringToFront();
+            for (int r = 0; r < gridBoard.RowCount; r++)
+            {
+                if (gridBoard.GetControlFromPosition(0, r) == null)
+                {
+                    gridBoard.Controls.Add(newPanel, 0, r);
+                    return; 
+                }
+            }
+
+            // 全てのグリッドセルが埋まっている場合にメッセージを表示
+            MessageBox.Show("全てのグリッドセルが埋まっています。");
         }
 
-        private EmployeeModel CreateEmployee()
+         private EmployeeModel CreateEmployee() =>
+            new EmployeeModel(++employeeId, $"Employee{employeeId}");
+
+       private void GridBoard_DragEnter(object sender, DragEventArgs e)
         {
-            employeeId++;
-            return new EmployeeModel(employeeId, "Employee" + employeeId);
+            e.Effect = e.Data.GetDataPresent(typeof(EmployeePanel)) ? DragDropEffects.Move : DragDropEffects.None;
         }
 
-        protected override void OnFormDragEnterSerializable(DragEventArgs dragEventArgs)
+         private void GridBoard_DragDrop(object sender, DragEventArgs e)
         {
-            dragEventArgs.Effect = DragDropEffects.None;
+             if (e.Data.GetData(typeof(EmployeePanel)) is not EmployeePanel draggedPanel) return;
+
+            Point clientPoint = gridBoard.PointToClient(new Point(e.X, e.Y));
+            int dropRow = clientPoint.Y / AppConstants.CellSize_height;
+
+            if (dropRow < 0 || dropRow >= gridBoard.RowCount) return;
+
+            // ドロップ先の列は常に0（1列グリッドのため）
+            int dropCol = 0;
+            Control existing = gridBoard.GetControlFromPosition(dropCol, dropRow);
+
+            //パネルの入れ替え
+            if (existing != null && existing != draggedPanel)
+            {
+                var existingPanel = existing as EmployeePanel;
+                var original = gridBoard.GetCellPosition(draggedPanel);
+
+                gridBoard.Controls.Remove(draggedPanel);
+                gridBoard.Controls.Remove(existingPanel);
+
+                gridBoard.Controls.Add(existingPanel, original.Column, original.Row);
+                gridBoard.Controls.Add(draggedPanel, dropCol, dropRow);
+            }
+            // 単なる移動
+            else
+            {
+                // gridBoardからドラッグされたパネルを一度削除
+                gridBoard.Controls.Remove(draggedPanel);
+                // ドラッグされたパネルをドロップ先の新しい位置に追加
+                gridBoard.Controls.Add(draggedPanel, dropCol, dropRow);
+            }
+
+            gridBoard.Invalidate(); // gridBoardを再描画して変更を反映
         }
 
         public class EmployeePanel : Panel
         {
-            private bool dragging = false;
-            private Point dragOffset; 
             private readonly EmployeeModel employee;
+
+            public EmployeeModel EmployeeData => employee;
 
             public EmployeePanel(EmployeeModel employee)
             {
-                this.employee = employee;
-
-                Label label = new Label
+                this.employee = employee;  
+                this.DoubleBuffered = true;  
+ 
+                Controls.Add(new Label
                 {
-                    Text = $"{employee.Id}: {employee.Name}",
+                    Text = $"{employee.Id}: {employee.Name}", // 表示テキスト（"10001: Employee10001"）
                     AutoSize = true,
                     Location = new Point(5, 5)
+                });
+
+                this.MouseDown += (s, e) =>
+                {
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        this.BringToFront(); // パネルを最前面に表示
+                        // ドラッグ＆ドロップ操作を開始。移動許可
+                        this.DoDragDrop(this, DragDropEffects.Move);
+                    }
                 };
-
-                Controls.Add(label);
-
-                this.MouseDown += EmployeePanel_MouseDown;
-                this.MouseMove += EmployeePanel_MouseMove;
-                this.MouseUp += EmployeePanel_MouseUp;
-            }
-
-            private void EmployeePanel_MouseDown(object sender, MouseEventArgs e)
-            {
-                if (e.Button == MouseButtons.Left)
-                {
-                    dragging = true;
-                    // ドラッグ開始時のマウス位置とパネルの左上隅のオフセットを記録
-                    dragOffset = new Point(e.X, e.Y);
-                    this.BringToFront(); // ドラッグ中のパネルを最前面に表示
-                }
-            }
-
-            private void EmployeePanel_MouseMove(object sender, MouseEventArgs e)
-            {
-                if (dragging)
-                {
-                    // 親コントロールのクライアント座標におけるマウスの現在位置
-                    Point currentScreenPos = this.Parent.PointToClient(Cursor.Position);
-
-                    // 新しいパネルの左上座標を計算 (水平方向は固定)
-                    int newLeft = AppConstants.Xmargin;
-                    int newTop = currentScreenPos.Y - dragOffset.Y; // マウス位置からオフセットを引く
-
-                    // 親コントロール (boardPanel) の境界内に制限します
-                    if (this.Parent != null)
-                    {
-                        // 垂直方向の境界チェック
-                        // 上端制限: グリッド開始Yオフセットより下には行かせません
-                        newTop = Math.Max(AppConstants.Ymargin, newTop);
-                        // 下端制限: 親の高さからパネルの高さとグリッド開始Yオフセットを考慮します
-                        newTop = Math.Min(newTop, this.Parent.ClientSize.Height - this.Height + AppConstants.Ymargin - AppConstants.CellSize_height);
-                    }
-
-                    this.Location = new Point(newLeft, newTop);
-                }
-            }
-
-            private void EmployeePanel_MouseUp(object sender, MouseEventArgs e)
-            {
-                if (dragging)
-                {
-                    dragging = false;
-
-                    // 垂直方向のみグリッドにスナップします
-                    // 現在のパネルの上端位置からグリッド開始オフセットを引いて、グリッド原点からの相対位置を求めます
-                    int relativeTop = this.Top - AppConstants.Ymargin;
-
-                    // 最も近いグリッドラインにスナップします
-                    int snappedRelativeTop = (int)Math.Round((double)relativeTop / AppConstants.CellSize_height) * AppConstants.CellSize_height;
-
-                    // オフセットを再度加算して、最終的なY座標を決定します
-                    int snappedTop = snappedRelativeTop + AppConstants.Ymargin;
-
-                    // スナップした位置が親の境界内に収まるように最終調整します
-                    if (this.Parent != null)
-                    {
-                        // 垂直方向の境界チェック
-                        snappedTop = Math.Max(AppConstants.Ymargin, snappedTop);
-                        snappedTop = Math.Min(snappedTop, this.Parent.ClientSize.Height - this.Height + AppConstants.Ymargin - AppConstants.CellSize_height);
-                    }
-
-                    this.Location = new Point(AppConstants.Xmargin, snappedTop); // 固定X座標と計算されたスナップTopを設定します
-                }
             }
         }
+
     }
+
+    public static class AppConstants
+    {
+        public const int Xmargin = 5; // X軸方向のマージン
+        public const int Ymargin = 5; // Y軸方向のマージン
+        public const int CellSize_height = 60; // グリッドセルの高さ
+        public const int emp_width = 1000; // 従業員パネルの幅
+    }
+
 }

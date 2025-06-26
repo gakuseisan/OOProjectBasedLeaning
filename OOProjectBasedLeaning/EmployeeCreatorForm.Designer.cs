@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             button1 = new Button();
-            boardPanel = new Panel();
+            gridBoard = new TableLayoutPanel(); // boardPanelをgridBoardに変更し、型をTableLayoutPanelに変更
             boardTitleLabel = new Label();
-            boardPanel.SuspendLayout();
+            gridBoard.SuspendLayout(); // boardPanelをgridBoardに変更
             SuspendLayout();
-            // 
+            //
             // button1
-            // 
+            //
             button1.Location = new Point(619, 14);
             button1.Margin = new Padding(4, 5, 4, 5);
             button1.Name = "button1";
@@ -44,19 +44,25 @@
             button1.Text = "従業員の作成";
             button1.UseVisualStyleBackColor = true;
             button1.Click += CreateGuestEvent;
-            // 
-            // boardPanel
-            // 
-            boardPanel.AllowDrop = true;
-            boardPanel.BackColor = Color.Gray;
-            boardPanel.Controls.Add(boardTitleLabel);
-            boardPanel.Location = new Point(12, 12);
-            boardPanel.Name = "boardPanel";
-            boardPanel.Size = new Size(600, 600);
-            boardPanel.TabIndex = 1;
-            // 
+            //
+            // gridBoard // boardPanelの代わりにgridBoard
+            //
+            gridBoard.AllowDrop = true;
+            gridBoard.BackColor = Color.Gray;
+            // TableLayoutPanelの列と行を設定します。必要に応じて調整してください。
+            gridBoard.ColumnCount = 1; // 仮の列数
+            gridBoard.RowCount = 1;    // 仮の行数
+            gridBoard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F)); // 列のスタイル
+            gridBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));       // 行のスタイル
+            // boardTitleLabelは直接Controls.Addするのではなく、Cellに配置することになりますが、ここでは一旦コメントアウトします。
+            // gridBoard.Controls.Add(boardTitleLabel);
+            gridBoard.Location = new Point(12, 12);
+            gridBoard.Name = "gridBoard"; // NameをgridBoardに変更
+            gridBoard.Size = new Size(600, 600);
+            gridBoard.TabIndex = 1;
+            //
             // boardTitleLabel
-            // 
+            //
             boardTitleLabel.AutoSize = true;
             boardTitleLabel.ForeColor = Color.White;
             boardTitleLabel.Location = new Point(10, 10);
@@ -64,27 +70,27 @@
             boardTitleLabel.Size = new Size(52, 25);
             boardTitleLabel.TabIndex = 0;
             boardTitleLabel.Text = "ボード";
-            // 
+            //
             // EmployeeCreatorForm
-            // 
+            //
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(751, 627);
             Controls.Add(button1);
-            Controls.Add(boardPanel);
+            Controls.Add(gridBoard); // boardPanelの代わりにgridBoard
             Margin = new Padding(4, 5, 4, 5);
             Name = "EmployeeCreatorForm";
             Text = "EmployeeCreatorForm";
-            boardPanel.ResumeLayout(false);
-            boardPanel.PerformLayout();
+            gridBoard.ResumeLayout(false); // boardPanelをgridBoardに変更
+            // TableLayoutPanelにPerformLayout()は通常不要ですが、もし必要なら記述してください。
+            // gridBoard.PerformLayout();
             ResumeLayout(false);
         }
-
 
         #endregion
 
         private Button button1;
-        private Panel boardPanel;
+        private TableLayoutPanel gridBoard; // PanelからTableLayoutPanelに変更
         private Label boardTitleLabel;
     }
 }
