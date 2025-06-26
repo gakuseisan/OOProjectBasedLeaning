@@ -1,6 +1,6 @@
 ﻿namespace OOProjectBasedLeaning
 {
-    partial class Form1
+    partial class EmployeeRest
     {
         /// <summary>
         ///  Required designer variable.
