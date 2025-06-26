@@ -31,6 +31,10 @@ namespace OOProjectBasedLeaning
             }
         }
 
+        private void HomeForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }
