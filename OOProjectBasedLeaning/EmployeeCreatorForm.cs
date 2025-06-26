@@ -40,7 +40,13 @@ namespace OOProjectBasedLeaning
 
         }
 
+<<<<<<< sawada
+        
+
+        private Employee CreateEmployee()
+=======
         private EmployeeModel CreateEmployee()
+>>>>>>> master
         {
 
             employeeId++;
