@@ -8,19 +8,18 @@ namespace OOProjectBasedLeaning
     public partial class EmployeeCreatorForm : DragDropForm
     {
         private Panel kokubanPanel;
+        private Label kokubanTitleLabel;
         private int employeeId = 10000;
 
         public EmployeeCreatorForm()
         {
             InitializeComponent();
-            // フォームのドラッグ＆ドロップを無効化（黒板パネルだけが有効）
             this.AllowDrop = false;
             InitializeKokuban();
         }
 
         private void InitializeKokuban()
         {
-            // 黒板パネルの初期化（ドラッグ＆ドロップ有効）
             kokubanPanel = new Panel
             {
                 Location = new Point(100, 10),
@@ -29,12 +28,10 @@ namespace OOProjectBasedLeaning
                 AllowDrop = true
             };
 
-            // 黒板パネル上でのみ DragEnter/DragDrop イベントを発生させる
             kokubanPanel.DragEnter += Kokuban_DragEnter;
             kokubanPanel.DragDrop += Kokuban_DragDrop;
 
-            // 黒板のタイトルラベル
-            Label titleLabel = new Label
+            kokubanTitleLabel = new Label
             {
                 Text = "こくばん",
                 ForeColor = Color.White,
@@ -42,21 +39,18 @@ namespace OOProjectBasedLeaning
                 AutoSize = true
             };
 
-            kokubanPanel.Controls.Add(titleLabel);
+            kokubanPanel.Controls.Add(kokubanTitleLabel);
             Controls.Add(kokubanPanel);
             kokubanPanel.BringToFront();
         }
 
-        // 黒板パネル上で、ファイルがドラッグされている場合のみ操作を許可
         private void Kokuban_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effect = DragDropEffects.Copy;
-            else
-                e.Effect = DragDropEffects.None;
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop)
+                ? DragDropEffects.Copy
+                : DragDropEffects.None;
         }
 
-        // 黒板パネル上のドロップ処理（例として、ドロップされたファイル数を表示）
         private void Kokuban_DragDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -66,21 +60,20 @@ namespace OOProjectBasedLeaning
             }
         }
 
-        // 社員パネル追加（黒板パネル上に少し間隔をあけて順番に並べる）
         private void CreateGuestEvent(object sender, EventArgs e)
         {
-            // 黒板パネル上の社員パネルの数を、タイトルラベルを除いてカウントする
             int employeePanelCount = kokubanPanel.Controls.OfType<EmployeePanel>().Count();
             int gap = 10;
             int panelHeight = 50;
-            // タイトルラベルの下（最初のコントロール）からパネルを配置する
-            int startY = ((Label)kokubanPanel.Controls[0]).Bottom + gap;
+            int startY = kokubanTitleLabel.Bottom + gap;
             int panelY = startY + (panelHeight + gap) * employeePanelCount;
 
-            EmployeePanel newEmployeePanel = new EmployeePanel(CreateEmployee())
+            var newEmployee = CreateEmployee();
+
+            EmployeePanel newEmployeePanel = new EmployeePanel(newEmployee)
             {
                 Location = new Point(10, panelY),
-                Width = kokubanPanel.Width - 20,  // 黒板内で左右に余裕をもたせる
+                Width = kokubanPanel.Width - 20,
                 Height = panelHeight,
                 BackColor = Color.LightBlue
             };
@@ -89,22 +82,66 @@ namespace OOProjectBasedLeaning
             newEmployeePanel.BringToFront();
         }
 
-        private Employee CreateEmployee()
+        private EmployeeModel CreateEmployee()
         {
             employeeId++;
             return new EmployeeModel(employeeId, "Employee" + employeeId);
         }
 
-        // DragDropForm から継承しているフォーム全体のドラッグ＆ドロップ処理は、ここで無効化
         protected override void OnFormDragEnterSerializable(DragEventArgs dragEventArgs)
         {
-            // フォームでの dragenter イベントは影響させない
             dragEventArgs.Effect = DragDropEffects.None;
         }
 
         protected override void OnFormDragDropSerializable(object? serializableObject, DragEventArgs dragEventArgs)
         {
-            // フォームでの drop イベントも無効化
+        }
+
+        // === ネストされた EmployeePanel クラス ===
+        public class EmployeePanel : Panel
+        {
+            private bool dragging = false;
+            private Point dragStart;
+            private readonly EmployeeModel employee;
+
+            public EmployeePanel(EmployeeModel employee)
+            {
+                this.employee = employee;
+
+                Label label = new Label
+                {
+                    Text = $"{employee.Id}: {employee.Name}",
+                    AutoSize = true,
+                    Location = new Point(5, 5)
+                };
+
+                Controls.Add(label);
+
+                this.MouseDown += EmployeePanel_MouseDown;
+                this.MouseMove += EmployeePanel_MouseMove;
+                this.MouseUp += EmployeePanel_MouseUp;
+            }
+
+            private void EmployeePanel_MouseDown(object sender, MouseEventArgs e)
+            {
+                dragging = true;
+                dragStart = e.Location;
+                this.BringToFront();
+            }
+
+            private void EmployeePanel_MouseMove(object sender, MouseEventArgs e)
+            {
+                if (dragging)
+                {
+                    this.Left += e.X - dragStart.X;
+                    this.Top += e.Y - dragStart.Y;
+                }
+            }
+
+            private void EmployeePanel_MouseUp(object sender, MouseEventArgs e)
+            {
+                dragging = false;
+            }
         }
     }
 }
