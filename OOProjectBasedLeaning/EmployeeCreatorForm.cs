@@ -9,8 +9,10 @@ namespace OOProjectBasedLeaning
     public partial class EmployeeCreatorForm : Form
     {
         private int employeeId = 10000;
+        private List<EmployeeModel> createdEmployees = new List<EmployeeModel>();
+        private HomeForm homeForm;
 
-        public EmployeeCreatorForm()
+        public EmployeeCreatorForm(HomeForm homeForm)
         {
             InitializeComponent();
             this.AllowDrop = false;
@@ -27,6 +29,7 @@ namespace OOProjectBasedLeaning
 
             gridBoard.DragEnter += GridBoard_DragEnter;
             gridBoard.DragDrop += GridBoard_DragDrop;
+
         }
 
         private void CreateGuestEvent(object sender, EventArgs e)
@@ -55,6 +58,7 @@ namespace OOProjectBasedLeaning
 
          private EmployeeModel CreateEmployee() =>
             new EmployeeModel(++employeeId, $"Employee{employeeId}");
+
 
        private void GridBoard_DragEnter(object sender, DragEventArgs e)
         {
@@ -128,6 +132,17 @@ namespace OOProjectBasedLeaning
             }
         }
 
+        //確定ボタンが押された時データをhomeFormに移動させる
+        private void Confirmed_Click(object sender, EventArgs e)
+        {
+            foreach (var emp in createdEmployees)
+            {
+                homeForm.AddEmployee(emp);
+            }
+
+            homeForm.DisplayEmployees();
+
+        }
     }
 
     public static class AppConstants

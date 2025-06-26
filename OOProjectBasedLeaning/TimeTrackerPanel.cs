@@ -7,27 +7,45 @@ using System.Threading.Tasks;
 namespace OOProjectBasedLeaning
 {
 
-    public class TimeTrackerPanel : Panel
+    public class TimeTrackerPanel : Panel, Observer
     {
 
-            private TimeTracker timeTracker;
+        private TimeTracker timeTracker = NullTimeTracker.Instance;
+
+        public TimeTrackerPanel()
+        {
+            InitializeComponent();
+        }
+
+        public TimeTrackerPanel(TimeTracker timeTracker)
+        {
     
-            public TimeTrackerPanel(TimeTracker timeTracker)
+            this.timeTracker = timeTracker;
+    
+            InitializeComponent();
+    
+        }
+
+        public void Update(object sender)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void InitializeComponent()
+        {
+            Label titleLabel = new Label()
             {
+                Text = "出退勤ボタン",
+                Font = new Font("Arial",14,FontStyle.Bold),
+                Dock = DockStyle.Top,
+                TextAlign = ContentAlignment.MiddleCenter
+                
+            };
+            Controls.Add(titleLabel);
+
+
     
-                this.timeTracker = timeTracker;
-    
-                InitializeComponent();
-    
-            }
-    
-            private void InitializeComponent()
-            {
-    
-                // Initialize UI components for the Time Tracker panel
-                // This could include buttons for PunchIn, PunchOut, and displaying status
-    
-            }
+        }
 
         // Methods to handle user interactions like PunchIn, PunchOut, etc.
 
