@@ -135,13 +135,49 @@ namespace OOProjectBasedLeaning
         //確定ボタンが押された時データをhomeFormに移動させる
         private void Confirmed_Click(object sender, EventArgs e)
         {
-            foreach (var emp in createdEmployees)
+            // 🔽 DBに登録
+            foreach (var employee in createdEmployees)
             {
-                homeForm.AddEmployee(emp);
+                InsertEmployeeToDatabase(employee);
             }
 
-            homeForm.DisplayEmployees();
+            MessageBox.Show("全従業員をデータベースに登録しました。");
 
+
+        }
+
+        //データをデータベースに登録
+        private void InsertEmployeeToDatabase(EmployeeModel employee)
+        {
+            string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=OOProjectBasedLeaning;Trusted_Connection=True;";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"
+            INSERT INTO Employees (
+                EmployeeID, EmployeeName, WorkTime_Sum, WorkDayCount,
+                WorkTime_In, WorkTime_Out, WorkTime_RestSum, WorkStatus
+            ) VALUES (
+                @EmployeeID, @EmployeeName, @WorkTime_Sum, @WorkDayCount,
+                @WorkTime_In, @WorkTime_Out, @WorkTime_RestSum, @WorkStatus
+            )";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@EmployeeID", employee.Id);
+                    cmd.Parameters.AddWithValue("@EmployeeName", employee.Name);
+                    cmd.Parameters.AddWithValue("@WorkTime_Sum", employee.WorkTimeSum);
+                    cmd.Parameters.AddWithValue("@WorkDayCount", employee.WorkDayCount);
+                    cmd.Parameters.AddWithValue("@WorkTime_In", employee.WorkTimeIn);
+                    cmd.Parameters.AddWithValue("@WorkTime_Out", employee.WorkTimeOut);
+                    cmd.Parameters.AddWithValue("@WorkTime_RestSum", (object?)employee.WorkTimeRestSum ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@WorkStatus", (object?)employee.WorkStatus ?? DBNull.Value);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 
