@@ -31,10 +31,37 @@ namespace OOProjectBasedLeaning
 
     public class EmployeeModel : ModelEntity, Employee
     {
-
         private int id;
 
         private Company company = NullCompany.Instance;
+
+        public int Id { get { return id; } }
+        public string Name { get; }
+
+        public TimeSpan WorkTimeSum { get; }
+        public int WorkDayCount { get; }
+        public TimeSpan WorkTimeIn { get; }
+        public TimeSpan WorkTimeOut { get; }
+        public TimeSpan? WorkTimeRestSum { get; }
+        public string? WorkStatus { get; }
+
+        // 主要なコンストラクタのみ残す
+        public EmployeeModel(
+            int id, string name,
+            TimeSpan workTimeSum = default, int workDayCount = 0,
+            TimeSpan workTimeIn = default, TimeSpan workTimeOut = default,
+            TimeSpan? workTimeRestSum = null,
+            string? workStatus = null)
+        {
+            this.id = id;
+            Name = name;
+            WorkTimeSum = workTimeSum;
+            WorkDayCount = workDayCount;
+            WorkTimeIn = workTimeIn;
+            WorkTimeOut = workTimeOut;
+            WorkTimeRestSum = workTimeRestSum;
+            WorkStatus = workStatus;
+        }
 
         public EmployeeModel() : this(Employee.NEW)
         {
@@ -80,7 +107,6 @@ namespace OOProjectBasedLeaning
 
         }
 
-        public int Id { get { return id; } }
 
         public Employee AddCompany(Company company)
         {
