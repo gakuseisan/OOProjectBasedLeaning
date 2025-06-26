@@ -1,84 +1,44 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace OOProjectBasedLeaning
 {
+    public static class AppConstants
+    {
+        public const int Xmargin = 70; // 横余白 
+        public const int Ymargin = 50; // 上余白 
+        public const int CellSize_height = 60; // グリッド間隔
+        public const int emp_width = 200; // 従業員パネルの幅
+        public const int emp_height = 10; // 従業員パネルの高さ
+    }
     public partial class EmployeeCreatorForm : DragDropForm
     {
-        private Panel kokubanPanel;
-        private Label kokubanTitleLabel;
         private int employeeId = 10000;
 
         public EmployeeCreatorForm()
         {
             InitializeComponent();
             this.AllowDrop = false;
-            InitializeKokuban();
-        }
-
-        private void InitializeKokuban()
-        {
-            kokubanPanel = new Panel
-            {
-                Location = new Point(100, 10),
-                Size = new Size(600, 600),
-                BackColor = Color.Black,
-                AllowDrop = true
-            };
-
-            kokubanPanel.DragEnter += Kokuban_DragEnter;
-            kokubanPanel.DragDrop += Kokuban_DragDrop;
-
-            kokubanTitleLabel = new Label
-            {
-                Text = "こくばん",
-                ForeColor = Color.White,
-                Location = new Point(10, 10),
-                AutoSize = true
-            };
-
-            kokubanPanel.Controls.Add(kokubanTitleLabel);
-            Controls.Add(kokubanPanel);
-            kokubanPanel.BringToFront();
-        }
-
-        private void Kokuban_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop)
-                ? DragDropEffects.Copy
-                : DragDropEffects.None;
-        }
-
-        private void Kokuban_DragDrop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                MessageBox.Show($"ドロップされたファイル数: {files.Length}", "こくばん");
-            }
         }
 
         private void CreateGuestEvent(object sender, EventArgs e)
         {
-            int employeePanelCount = kokubanPanel.Controls.OfType<EmployeePanel>().Count();
-            int gap = 10;
-            int panelHeight = 50;
-            int startY = kokubanTitleLabel.Bottom + gap;
-            int panelY = startY + (panelHeight + gap) * employeePanelCount;
-
             var newEmployee = CreateEmployee();
 
+            //従業員パネルのあれこれ
             EmployeePanel newEmployeePanel = new EmployeePanel(newEmployee)
             {
-                Location = new Point(10, panelY),
-                Width = kokubanPanel.Width - 20,
-                Height = panelHeight,
+                Location = new Point(
+                    AppConstants.Xmargin, 
+                    AppConstants.Ymargin + (employeeId - 10001) * AppConstants.CellSize_height
+                    ),
+                Width = AppConstants.emp_width,
+                Height = AppConstants.CellSize_height - AppConstants.emp_height,
                 BackColor = Color.LightBlue
             };
 
-            kokubanPanel.Controls.Add(newEmployeePanel);
+            boardPanel.Controls.Add(newEmployeePanel);
             newEmployeePanel.BringToFront();
         }
 
@@ -93,15 +53,10 @@ namespace OOProjectBasedLeaning
             dragEventArgs.Effect = DragDropEffects.None;
         }
 
-        protected override void OnFormDragDropSerializable(object? serializableObject, DragEventArgs dragEventArgs)
-        {
-        }
-
-        // === ネストされた EmployeePanel クラス ===
         public class EmployeePanel : Panel
         {
             private bool dragging = false;
-            private Point dragStart;
+            private Point dragOffset; 
             private readonly EmployeeModel employee;
 
             public EmployeePanel(EmployeeModel employee)
@@ -124,23 +79,66 @@ namespace OOProjectBasedLeaning
 
             private void EmployeePanel_MouseDown(object sender, MouseEventArgs e)
             {
-                dragging = true;
-                dragStart = e.Location;
-                this.BringToFront();
+                if (e.Button == MouseButtons.Left)
+                {
+                    dragging = true;
+                    // ドラッグ開始時のマウス位置とパネルの左上隅のオフセットを記録
+                    dragOffset = new Point(e.X, e.Y);
+                    this.BringToFront(); // ドラッグ中のパネルを最前面に表示
+                }
             }
 
             private void EmployeePanel_MouseMove(object sender, MouseEventArgs e)
             {
                 if (dragging)
                 {
-                    this.Left += e.X - dragStart.X;
-                    this.Top += e.Y - dragStart.Y;
+                    // 親コントロールのクライアント座標におけるマウスの現在位置
+                    Point currentScreenPos = this.Parent.PointToClient(Cursor.Position);
+
+                    // 新しいパネルの左上座標を計算 (水平方向は固定)
+                    int newLeft = AppConstants.Xmargin;
+                    int newTop = currentScreenPos.Y - dragOffset.Y; // マウス位置からオフセットを引く
+
+                    // 親コントロール (boardPanel) の境界内に制限します
+                    if (this.Parent != null)
+                    {
+                        // 垂直方向の境界チェック
+                        // 上端制限: グリッド開始Yオフセットより下には行かせません
+                        newTop = Math.Max(AppConstants.Ymargin, newTop);
+                        // 下端制限: 親の高さからパネルの高さとグリッド開始Yオフセットを考慮します
+                        newTop = Math.Min(newTop, this.Parent.ClientSize.Height - this.Height + AppConstants.Ymargin - AppConstants.CellSize_height);
+                    }
+
+                    this.Location = new Point(newLeft, newTop);
                 }
             }
 
             private void EmployeePanel_MouseUp(object sender, MouseEventArgs e)
             {
-                dragging = false;
+                if (dragging)
+                {
+                    dragging = false;
+
+                    // 垂直方向のみグリッドにスナップします
+                    // 現在のパネルの上端位置からグリッド開始オフセットを引いて、グリッド原点からの相対位置を求めます
+                    int relativeTop = this.Top - AppConstants.Ymargin;
+
+                    // 最も近いグリッドラインにスナップします
+                    int snappedRelativeTop = (int)Math.Round((double)relativeTop / AppConstants.CellSize_height) * AppConstants.CellSize_height;
+
+                    // オフセットを再度加算して、最終的なY座標を決定します
+                    int snappedTop = snappedRelativeTop + AppConstants.Ymargin;
+
+                    // スナップした位置が親の境界内に収まるように最終調整します
+                    if (this.Parent != null)
+                    {
+                        // 垂直方向の境界チェック
+                        snappedTop = Math.Max(AppConstants.Ymargin, snappedTop);
+                        snappedTop = Math.Min(snappedTop, this.Parent.ClientSize.Height - this.Height + AppConstants.Ymargin - AppConstants.CellSize_height);
+                    }
+
+                    this.Location = new Point(AppConstants.Xmargin, snappedTop); // 固定X座標と計算されたスナップTopを設定します
+                }
             }
         }
     }
