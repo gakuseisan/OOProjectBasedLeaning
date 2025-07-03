@@ -41,6 +41,7 @@ namespace OOProjectBasedLeaning
         private void CreateGuestEvent(object sender, EventArgs e)
         {
             var newEmployee = CreateEmployee();
+            createdEmployees.Add(newEmployee);
             var newPanel = new EmployeePanel(newEmployee)
             {
                 Width = AppConstants.emp_width,
@@ -106,7 +107,6 @@ namespace OOProjectBasedLeaning
                 ""
             );
         }
-
 
         private void GridBoard_DragEnter(object sender, DragEventArgs e)
         {
@@ -183,13 +183,16 @@ namespace OOProjectBasedLeaning
         //確定ボタンが押された時データをhomeFormに移動させる
         private void Confirmed_Click(object sender, EventArgs e)
         {
-            // 🔽 DBに登録
-            foreach (var employee in createdEmployees)
+            
+            foreach (var emp in createdEmployees)
             {
-                InsertEmployeeToDatabase(employee);
+                InsertEmployeeToDatabase(emp);// 🔽 DBに登録
+                homeForm.AddEmployee(emp);
             }
 
-            MessageBox.Show("全従業員をデータベースに登録しました。");
+            homeForm.DisplayEmployees();         // ListBox をリフレッシュ
+            createdEmployees.Clear();            // 渡し終えたらクリア（任意）
+            MessageBox.Show("全従業員を登録し、Home 画面を更新しました。");
 
 
         }
