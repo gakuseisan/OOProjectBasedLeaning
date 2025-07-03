@@ -47,5 +47,10 @@ namespace OOProjectBasedLeaning
             recorder.Dispose();
         }
 
+        private void changejump_Click(object sender, EventArgs e)
+        {
+            ChangeForm changeForm = new ChangeForm();
+            changeForm.Show();
+        }
     }
 }

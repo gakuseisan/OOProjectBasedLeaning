@@ -18,6 +18,7 @@ namespace OOProjectBasedLeaning
             // 表示
             homeForm.Show();
             creatorForm.Show();
+            
 
             // 会社フォーム
             new CompanyForm().Show();

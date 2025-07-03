@@ -49,6 +49,7 @@
             _NowChooseWork = new Label();
             button_comit = new Button();
             listview_Log = new ListView();
+            changejump = new Button();
             SuspendLayout();
             // 
             // listBoxEmployees
@@ -238,11 +239,22 @@
             listview_Log.TabIndex = 9;
             listview_Log.UseCompatibleStateImageBehavior = false;
             // 
+            // changejump
+            // 
+            changejump.Location = new Point(756, 264);
+            changejump.Name = "changejump";
+            changejump.Size = new Size(112, 34);
+            changejump.TabIndex = 10;
+            changejump.Text = "お名前変更";
+            changejump.UseVisualStyleBackColor = true;
+            changejump.Click += changejump_Click;
+            // 
             // HomeForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(875, 450);
+            Controls.Add(changejump);
             Controls.Add(listview_Log);
             Controls.Add(_atWorkDisplay);
             Controls.Add(label_leaveWorkDisplay);
@@ -294,5 +306,6 @@
         private Label _NowChooseWork;
         private Button button_comit;
         private ListView listview_Log;
+        private Button changejump;
     }
 }
