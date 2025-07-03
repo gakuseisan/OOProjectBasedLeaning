@@ -38,9 +38,9 @@ namespace OOProjectBasedLeaning
             createdEmployees.Add(newEmployee);
             var newPanel = new EmployeePanel(newEmployee)
             {
-                Width = AppConstants.emp_width,           
-                Height = AppConstants.CellSize_height,   
-                BackColor = Color.LightBlue,             
+                Width = AppConstants.emp_width,
+                Height = AppConstants.CellSize_height,
+                BackColor = Color.LightBlue,
                 Margin = new Padding(AppConstants.Xmargin, AppConstants.Ymargin, 0, 0)
             };
 
@@ -49,7 +49,7 @@ namespace OOProjectBasedLeaning
                 if (gridBoard.GetControlFromPosition(0, r) == null)
                 {
                     gridBoard.Controls.Add(newPanel, 0, r);
-                    return; 
+                    return;
                 }
             }
 
@@ -70,7 +70,7 @@ namespace OOProjectBasedLeaning
 
          private void GridBoard_DragDrop(object sender, DragEventArgs e)
         {
-             if (e.Data.GetData(typeof(EmployeePanel)) is not EmployeePanel draggedPanel) return;
+            if (e.Data.GetData(typeof(EmployeePanel)) is not EmployeePanel draggedPanel) return;
 
             Point clientPoint = gridBoard.PointToClient(new Point(e.X, e.Y));
             int dropRow = clientPoint.Y / AppConstants.CellSize_height;
@@ -113,9 +113,9 @@ namespace OOProjectBasedLeaning
 
             public EmployeePanel(EmployeeModel employee)
             {
-                this.employee = employee;  
-                this.DoubleBuffered = true;  
- 
+                this.employee = employee;
+                this.DoubleBuffered = true;
+
                 Controls.Add(new Label
                 {
                     Text = $"{employee.Id}: {employee.Name}", // 表示テキスト（"10001: Employee10001"）
@@ -155,7 +155,7 @@ namespace OOProjectBasedLeaning
         //データをデータベースに登録
         private void InsertEmployeeToDatabase(EmployeeModel employee)
         {
-            string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=OOProjectBasedLeaning;Trusted_Connection=True;";
+            string connectionString = "Server=(LocalDB)\\\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\\\App_Data\\\\OOProjectBasedLeaning.mdf;Integrated Security=True;";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
