@@ -36,10 +36,10 @@
             // 
             // button1
             // 
-            button1.Location = new Point(619, 14);
-            button1.Margin = new Padding(4, 5, 4, 5);
+            button1.Location = new Point(884, 23);
+            button1.Margin = new Padding(6, 8, 6, 8);
             button1.Name = "button1";
-            button1.Size = new Size(89, 31);
+            button1.Size = new Size(127, 52);
             button1.TabIndex = 0;
             button1.Text = "従業員の作成";
             button1.UseVisualStyleBackColor = true;
@@ -51,11 +51,12 @@
             gridBoard.BackColor = Color.Gray;
             gridBoard.ColumnCount = 1;
             gridBoard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            gridBoard.Location = new Point(12, 12);
+            gridBoard.Location = new Point(17, 20);
+            gridBoard.Margin = new Padding(4, 5, 4, 5);
             gridBoard.Name = "gridBoard";
             gridBoard.RowCount = 1;
             gridBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            gridBoard.Size = new Size(600, 600);
+            gridBoard.Size = new Size(857, 1000);
             gridBoard.TabIndex = 1;
             // 
             // boardTitleLabel
@@ -70,9 +71,10 @@
             // 
             // Confirmed
             // 
-            Confirmed.Location = new Point(620, 96);
+            Confirmed.Location = new Point(886, 160);
+            Confirmed.Margin = new Padding(4, 5, 4, 5);
             Confirmed.Name = "Confirmed";
-            Confirmed.Size = new Size(89, 31);
+            Confirmed.Size = new Size(127, 52);
             Confirmed.TabIndex = 1;
             Confirmed.Text = "確定";
             Confirmed.UseVisualStyleBackColor = true;
@@ -80,13 +82,13 @@
             // 
             // EmployeeCreatorForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(759, 523);
+            ClientSize = new Size(1084, 872);
             Controls.Add(gridBoard);
             Controls.Add(Confirmed);
             Controls.Add(button1);
-            Margin = new Padding(4, 5, 4, 5);
+            Margin = new Padding(6, 8, 6, 8);
             Name = "EmployeeCreatorForm";
             Text = "EmployeeCreatorForm";
             ResumeLayout(false);

@@ -294,5 +294,6 @@
         private Label _NowChooseWork;
         private Button button_comit;
         private ListView listview_Log;
+        
     }
 }
