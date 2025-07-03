@@ -6,9 +6,8 @@ namespace OOProjectBasedLeaning
 {
     public partial class HomeForm : Form
     {
-        private List<EmployeeModel> employees = new List<EmployeeModel>();
-
-        private TimeRecorder recorder;  // TimeRecorder を使う
+        private List<EmployeeModel> employees = new();
+        private TimeRecorder recorder;
 
         public HomeForm()
         {
@@ -18,7 +17,6 @@ namespace OOProjectBasedLeaning
         public void AddEmployee(EmployeeModel employee)
         {
             employees.Add(employee);
-            // 自動で表示も更新したいなら：
             listBoxEmployees.Items.Add($"{employee.Id} - {employee.Name}");
         }
 
@@ -31,15 +29,15 @@ namespace OOProjectBasedLeaning
             }
         }
 
+        public List<EmployeeModel> GetEmployees()
+        {
+            return employees;
+        }
+
         private void HomeForm_Load(object sender, EventArgs e)
         {
-            // TimeRecorder 初期化
             recorder = new TimeRecorder();
-
-            // 時計用ラベルにバインド（自動更新される）
             recorder.BindClock(labelClock);
-
-            // タイマー開始
             recorder.Start();
         }
 

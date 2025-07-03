@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
 namespace OOProjectBasedLeaning
 {
-
     public partial class EmployeeCreatorForm : Form
     {
         private int employeeId = 10000;
-        private List<EmployeeModel> createdEmployees = new List<EmployeeModel>();
+        private List<EmployeeModel> createdEmployees = new();
         private HomeForm homeForm;
 
         public EmployeeCreatorForm(HomeForm homeForm)
@@ -20,8 +20,8 @@ namespace OOProjectBasedLeaning
             gridBoard.ColumnStyles.Clear();
             gridBoard.RowStyles.Clear();
 
-            gridBoard.ColumnCount = 1;//列数(横)
-            gridBoard.RowCount = 10;  //行数(縦)
+            gridBoard.ColumnCount = 1;
+            gridBoard.RowCount = 10;
 
             gridBoard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             for (int i = 0; i < gridBoard.RowCount; i++)
@@ -29,13 +29,13 @@ namespace OOProjectBasedLeaning
 
             gridBoard.DragEnter += GridBoard_DragEnter;
             gridBoard.DragDrop += GridBoard_DragDrop;
-
         }
 
         private void CreateGuestEvent(object sender, EventArgs e)
         {
             var newEmployee = CreateEmployee();
             createdEmployees.Add(newEmployee);
+
             var newPanel = new EmployeePanel(newEmployee)
             {
                 Width = AppConstants.emp_width,
@@ -53,12 +53,10 @@ namespace OOProjectBasedLeaning
                 }
             }
 
-            // 全てのグリッドセルが埋まっている場合にメッセージを表示
             MessageBox.Show("全てのグリッドセルが埋まっています。");
         }
 
-        //現在のEmployeeIDの最大値を取得
-        private int GetMaxEmployeeIdFromDatabase()
+        private int GetNextEmployeeId()
         {
             int maxId = 0;
             string connectionString = @"Server=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\App_Data\OOProjectBasedLeaning.mdf;Integrated Security=True;";
@@ -84,11 +82,9 @@ namespace OOProjectBasedLeaning
 
             if (dropRow < 0 || dropRow >= gridBoard.RowCount) return;
 
-            // ドロップ先の列は常に0（1列グリッドのため）
             int dropCol = 0;
             Control existing = gridBoard.GetControlFromPosition(dropCol, dropRow);
 
-            //パネルの入れ替え
             if (existing != null && existing != draggedPanel)
             {
                 var existingPanel = existing as EmployeePanel;
@@ -100,17 +96,29 @@ namespace OOProjectBasedLeaning
                 gridBoard.Controls.Add(existingPanel, original.Column, original.Row);
                 gridBoard.Controls.Add(draggedPanel, dropCol, dropRow);
             }
-            // 単なる移動
             else
             {
-                // gridBoardからドラッグされたパネルを一度削除
                 gridBoard.Controls.Remove(draggedPanel);
-                // ドラッグされたパネルをドロップ先の新しい位置に追加
                 gridBoard.Controls.Add(draggedPanel, dropCol, dropRow);
             }
 
-            gridBoard.Invalidate(); // gridBoardを再描画して変更を反映
+            gridBoard.Invalidate();
         }
+
+        private void Confirmed_Click(object sender, EventArgs e)
+        {
+            foreach (var emp in createdEmployees)
+            {
+                homeForm.AddEmployee(emp);
+            }
+
+            homeForm.DisplayEmployees();
+            createdEmployees.Clear();
+
+            MessageBox.Show("全従業員を Home に登録しました。");
+        }
+
+        private void gridBoard_Paint(object sender, PaintEventArgs e) { }
 
         public class EmployeePanel : Panel
         {
@@ -125,7 +133,7 @@ namespace OOProjectBasedLeaning
 
                 Controls.Add(new Label
                 {
-                    Text = $"{employee.Id}: {employee.Name}", // 表示テキスト（"10001: Employee10001"）
+                    Text = $"{employee.Id}: {employee.Name}",
                     AutoSize = true,
                     Location = new Point(5, 5)
                 });
@@ -134,30 +142,13 @@ namespace OOProjectBasedLeaning
                 {
                     if (e.Button == MouseButtons.Left)
                     {
-                        this.BringToFront(); // パネルを最前面に表示
-                        // ドラッグ＆ドロップ操作を開始。移動許可
+                        this.BringToFront();
                         this.DoDragDrop(this, DragDropEffects.Move);
                     }
                 };
             }
         }
-
-        //確定ボタンが押された時データをhomeFormに移動させる
-        private void Confirmed_Click(object sender, EventArgs e)
-        {
-            
-            foreach (var emp in createdEmployees)
-            {
-                InsertEmployeeToDatabase(emp);// 🔽 DBに登録
-                homeForm.AddEmployee(emp);
-            }
-
-            homeForm.DisplayEmployees();         // ListBox をリフレッシュ
-            createdEmployees.Clear();            // 渡し終えたらクリア（任意）
-            MessageBox.Show("全従業員を登録し、Home 画面を更新しました。");
-
-
-        }
+    }
 
         //データをデータベースに登録
         private void InsertEmployeeToDatabase(EmployeeModel employee)
@@ -197,10 +188,9 @@ namespace OOProjectBasedLeaning
 
     public static class AppConstants
     {
-        public const int Xmargin = 5; // X軸方向のマージン
-        public const int Ymargin = 5; // Y軸方向のマージン
-        public const int CellSize_height = 60; // グリッドセルの高さ
-        public const int emp_width = 1000; // 従業員パネルの幅
+        public const int Xmargin = 5;
+        public const int Ymargin = 5;
+        public const int CellSize_height = 60;
+        public const int emp_width = 1000;
     }
-
 }
