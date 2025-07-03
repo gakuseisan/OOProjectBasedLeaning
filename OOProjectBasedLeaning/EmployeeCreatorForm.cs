@@ -67,7 +67,9 @@ namespace OOProjectBasedLeaning
         private int GetMaxEmployeeIdFromDatabase()
         {
             int maxId = 0;
-            string connectionString = "\"Server=(LocalDB)\\\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\\\App_Data\\\\OOProjectBasedLeaning.mdf;Integrated Security=True;\"\r\n";
+            string connectionString = @"Server=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\App_Data\OOProjectBasedLeaning.mdf;Integrated Security=True;";
+
+
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -200,7 +202,8 @@ namespace OOProjectBasedLeaning
         //データをデータベースに登録
         private void InsertEmployeeToDatabase(EmployeeModel employee)
         {
-            string connectionString = "Server=(LocalDB)\\\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\\\App_Data\\\\OOProjectBasedLeaning.mdf;Integrated Security=True;";
+            string connectionString = @"Server=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\App_Data\OOProjectBasedLeaning.mdf;Integrated Security=True;";
+
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
