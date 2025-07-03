@@ -57,6 +57,13 @@ namespace OOProjectBasedLeaning
             MessageBox.Show("全てのグリッドセルが埋まっています。");
         }
 
+        //現在のEmployeeIDの最大値を取得
+        private int GetMaxEmployeeIdFromDatabase()
+        {
+            int maxId = 0;
+            string connectionString = @"Server=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\App_Data\OOProjectBasedLeaning.mdf;Integrated Security=True;";
+
+
          private EmployeeModel CreateEmployee() =>
             new EmployeeModel(++employeeId, $"Employee{employeeId}");
 
@@ -155,7 +162,8 @@ namespace OOProjectBasedLeaning
         //データをデータベースに登録
         private void InsertEmployeeToDatabase(EmployeeModel employee)
         {
-            string connectionString = "Server=(LocalDB)\\\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\\\App_Data\\\\OOProjectBasedLeaning.mdf;Integrated Security=True;";
+            string connectionString = @"Server=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\App_Data\OOProjectBasedLeaning.mdf;Integrated Security=True;";
+
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
