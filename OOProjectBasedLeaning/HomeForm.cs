@@ -18,7 +18,8 @@ namespace OOProjectBasedLeaning
         public void AddEmployee(EmployeeModel employee)
         {
             employees.Add(employee);
-            MessageBox.Show($"追加された社員: {employee.Name}");
+            // 自動で表示も更新したいなら：
+            listBoxEmployees.Items.Add($"{employee.Id} - {employee.Name}");
         }
 
         public void DisplayEmployees()
