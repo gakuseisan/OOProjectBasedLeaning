@@ -107,9 +107,6 @@ namespace OOProjectBasedLeaning
             );
         }
 
-        protected override void OnFormDragEnterSerializable(DragEventArgs dragEventArgs)
-
-
         private void GridBoard_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = e.Data.GetDataPresent(typeof(EmployeePanel)) ? DragDropEffects.Move : DragDropEffects.None;
