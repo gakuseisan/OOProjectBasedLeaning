@@ -29,33 +29,38 @@
         private void InitializeComponent()
         {
             button1 = new Button();
-            gridBoard = new TableLayoutPanel(); // boardPanelをgridBoardに変更し、型をTableLayoutPanelに変更
+            gridBoard = new TableLayoutPanel();
             boardTitleLabel = new Label();
-            gridBoard.SuspendLayout(); // boardPanelをgridBoardに変更
             Confirmed = new Button();
-            button1.Location = new Point(619, 14);  
-            button1.Margin = new Padding(4, 5, 4, 5);
+            SuspendLayout();
+            // 
+            // button1
+            // 
+            button1.Location = new Point(433, 8);
             button1.Name = "button1";
-            button1.Size = new Size(127, 52);
+            button1.Size = new Size(89, 31);
             button1.TabIndex = 0;
             button1.Text = "従業員の作成";
             button1.UseVisualStyleBackColor = true;
             button1.Click += CreateGuestEvent;
-
+            // 
+            // gridBoard
+            // 
             gridBoard.AllowDrop = true;
             gridBoard.BackColor = Color.Gray;
-            // TableLayoutPanelの列と行を設定します。必要に応じて調整してください。
-            gridBoard.ColumnCount = 1; // 仮の列数
-            gridBoard.RowCount = 1;    // 仮の行数
-            gridBoard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F)); // 列のスタイル
-            gridBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));       // 行のスタイル
-            gridBoard.Location = new Point(12, 12);
-            gridBoard.Name = "gridBoard"; // NameをgridBoardに変更
-            gridBoard.Size = new Size(600, 600);
+            gridBoard.ColumnCount = 1;
+            gridBoard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            gridBoard.Location = new Point(8, 7);
+            gridBoard.Margin = new Padding(2, 2, 2, 2);
+            gridBoard.Name = "gridBoard";
+            gridBoard.RowCount = 1;
+            gridBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            gridBoard.Size = new Size(420, 360);
             gridBoard.TabIndex = 1;
-            //
+            gridBoard.Paint += gridBoard_Paint;
+            // 
             // boardTitleLabel
-            //
+            // 
             boardTitleLabel.AutoSize = true;
             boardTitleLabel.ForeColor = Color.White;
             boardTitleLabel.Location = new Point(10, 10);
@@ -63,20 +68,13 @@
             boardTitleLabel.Size = new Size(52, 25);
             boardTitleLabel.TabIndex = 0;
             boardTitleLabel.Text = "ボード";
-            //
-            // EmployeeCreatorForm
-            //
-            AutoScaleDimensions = new SizeF(10F, 25F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(751, 627);
-            Controls.Add(button1);
-            Controls.Add(gridBoard);
             // 
             // Confirmed
             // 
-            Confirmed.Location = new Point(614, 96);
+            Confirmed.Location = new Point(430, 58);
+            Confirmed.Margin = new Padding(2, 2, 2, 2);
             Confirmed.Name = "Confirmed";
-            Confirmed.Size = new Size(127, 52);
+            Confirmed.Size = new Size(89, 31);
             Confirmed.TabIndex = 1;
             Confirmed.Text = "確定";
             Confirmed.UseVisualStyleBackColor = true;
@@ -84,16 +82,14 @@
             // 
             // EmployeeCreatorForm
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(759, 523);
+            ClientSize = new Size(767, 536);
+            Controls.Add(gridBoard);
             Controls.Add(Confirmed);
             Controls.Add(button1);
-
-            Margin = new Padding(4, 5, 4, 5);
             Name = "EmployeeCreatorForm";
             Text = "EmployeeCreatorForm";
-            gridBoard.ResumeLayout(false); // boardPanelをgridBoardに変更
             ResumeLayout(false);
         }
 
