@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace OOProjectBasedLeaning
 {
@@ -15,6 +15,8 @@ namespace OOProjectBasedLeaning
         public EmployeeCreatorForm(HomeForm homeForm)
         {
             InitializeComponent();
+            this.homeForm = homeForm;
+
             this.AllowDrop = false;
 
             gridBoard.ColumnStyles.Clear();
@@ -58,22 +60,39 @@ namespace OOProjectBasedLeaning
 
         private int GetNextEmployeeId()
         {
-            int maxId = 0;
-            string connectionString = @"Server=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\App_Data\OOProjectBasedLeaning.mdf;Integrated Security=True;";
+            var all = homeForm.GetEmployees().Concat(createdEmployees);
+            if (!all.Any()) return 10000;
+            return all.Max(emp => emp.Id) + 1;
+        }
 
 
-         private EmployeeModel CreateEmployee() =>
-            new EmployeeModel(++employeeId, $"Employee{employeeId}");
+        private EmployeeModel CreateEmployee()
+        {
+            employeeId = GetNextEmployeeId();
 
+            TimeSpan inTime = TimeSpan.FromHours(10);
+            TimeSpan outTime = TimeSpan.FromHours(17);
+            TimeSpan workSum = outTime - inTime;
+            TimeSpan restSum = TimeSpan.FromMinutes(60);
 
-       private void GridBoard_DragEnter(object sender, DragEventArgs e)
+            return new EmployeeModel(
+                employeeId,
+                "Employee" + employeeId,
+                workSum,
+                1,
+                inTime,
+                outTime,
+                restSum,
+                ""
+            );
+        }
 
         private void GridBoard_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = e.Data.GetDataPresent(typeof(EmployeePanel)) ? DragDropEffects.Move : DragDropEffects.None;
         }
 
-         private void GridBoard_DragDrop(object sender, DragEventArgs e)
+        private void GridBoard_DragDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetData(typeof(EmployeePanel)) is not EmployeePanel draggedPanel) return;
 
@@ -146,42 +165,6 @@ namespace OOProjectBasedLeaning
                         this.DoDragDrop(this, DragDropEffects.Move);
                     }
                 };
-            }
-        }
-    }
-
-        //データをデータベースに登録
-        private void InsertEmployeeToDatabase(EmployeeModel employee)
-        {
-            string connectionString = @"Server=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\App_Data\OOProjectBasedLeaning.mdf;Integrated Security=True;";
-
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                conn.Open();
-
-                string sql = @"
-            INSERT INTO Employees (
-                EmployeeID, EmployeeName, WorkTime_Sum, WorkDayCount,
-                WorkTime_In, WorkTime_Out, WorkTime_RestSum, WorkStatus
-            ) VALUES (
-                @EmployeeID, @EmployeeName, @WorkTime_Sum, @WorkDayCount,
-                @WorkTime_In, @WorkTime_Out, @WorkTime_RestSum, @WorkStatus
-            )";
-
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@EmployeeID", employee.Id);
-                    cmd.Parameters.AddWithValue("@EmployeeName", employee.Name);
-                    cmd.Parameters.AddWithValue("@WorkTime_Sum", employee.WorkTimeSum);
-                    cmd.Parameters.AddWithValue("@WorkDayCount", employee.WorkDayCount);
-                    cmd.Parameters.AddWithValue("@WorkTime_In", employee.WorkTimeIn);
-                    cmd.Parameters.AddWithValue("@WorkTime_Out", employee.WorkTimeOut);
-                    cmd.Parameters.AddWithValue("@WorkTime_RestSum", (object?)employee.WorkTimeRestSum ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@WorkStatus", (object?)employee.WorkStatus ?? DBNull.Value);
-
-                    cmd.ExecuteNonQuery();
-                }
             }
         }
     }

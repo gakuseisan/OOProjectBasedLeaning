@@ -34,6 +34,11 @@ namespace OOProjectBasedLeaning
             return employees;
         }
 
+        public List<EmployeeModel> GetEmployees()
+        {
+            return employees;
+        }
+
         private void HomeForm_Load(object sender, EventArgs e)
         {
             recorder = new TimeRecorder();
