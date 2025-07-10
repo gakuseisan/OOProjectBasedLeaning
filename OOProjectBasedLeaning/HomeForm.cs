@@ -36,6 +36,9 @@ namespace OOProjectBasedLeaning
                 selectedEmployee = null;
                 label_NowUser.Text = "従業員未選択";
                 _NowChooseWork.Text = "";
+                // 削除後に選択が解除された場合も表示をクリア
+                _atWorkDisplay.Text = "";
+                label_leaveWorkDisplay.Text = "";
             }
         }
 
@@ -155,6 +158,49 @@ namespace OOProjectBasedLeaning
         private void labelPendingAction_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button_Delete_Click(object sender, EventArgs e)
+        {
+            if (selectedEmployee == null)
+            {
+                MessageBox.Show("削除する従業員を選択してください。", "削除エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 確認ダイアログの表示
+            DialogResult result = MessageBox.Show(
+                $"{selectedEmployee.Name} さんを削除してもよろしいですか？",
+                "従業員の削除確認",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (result == DialogResult.Yes)
+            {
+                string deletedEmployeeName = selectedEmployee.Name; // 削除する従業員名を一時的に保持
+
+                // employeesリストから削除
+                employees.Remove(selectedEmployee);
+
+                // ListBoxの表示を更新
+                DisplayEmployees();
+
+                // 選択状態をクリア
+                selectedEmployee = null;
+                listBoxEmployees.ClearSelected(); // ListBoxの選択を解除
+
+                // 関連する表示をリセット
+                label_NowUser.Text = "従業員未選択";
+                _NowChooseWork.Text = "";
+                _atWorkDisplay.Text = "";
+                label_leaveWorkDisplay.Text = "";
+                labelPendingAction.Text = "";
+                pendingAction = PendingAction.none;
+
+                // MessageBox.ShowをselectedEmployeeがnullになる前に移動
+                MessageBox.Show($"{deletedEmployeeName} さんを削除しました。", "削除完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

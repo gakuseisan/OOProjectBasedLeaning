@@ -36,7 +36,7 @@ namespace OOProjectBasedLeaning
         private Company company = NullCompany.Instance;
 
         public int Id { get { return id; } }
-        public string Name { get; }
+        public string Name { get; set; }
 
         public TimeSpan WorkTimeSum { get; }
         public int WorkDayCount { get; }

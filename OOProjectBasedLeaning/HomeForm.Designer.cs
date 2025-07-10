@@ -227,6 +227,7 @@
             button_Delete.TabIndex = 10;
             button_Delete.Text = "削除";
             button_Delete.UseVisualStyleBackColor = true;
+            button_Delete.Click += button_Delete_Click;
             // 
             // listBoxEmployees
             // 
