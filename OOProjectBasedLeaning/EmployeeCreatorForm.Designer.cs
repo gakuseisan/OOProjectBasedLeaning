@@ -36,7 +36,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(884, 23);
+            button1.Location = new Point(681, 20);
             button1.Margin = new Padding(6, 8, 6, 8);
             button1.Name = "button1";
             button1.Size = new Size(127, 52);
@@ -56,7 +56,7 @@
             gridBoard.Name = "gridBoard";
             gridBoard.RowCount = 1;
             gridBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            gridBoard.Size = new Size(857, 1000);
+            gridBoard.Size = new Size(654, 1000);
             gridBoard.TabIndex = 1;
             // 
             // boardTitleLabel
@@ -71,7 +71,7 @@
             // 
             // Confirmed
             // 
-            Confirmed.Location = new Point(886, 160);
+            Confirmed.Location = new Point(681, 109);
             Confirmed.Margin = new Padding(4, 5, 4, 5);
             Confirmed.Name = "Confirmed";
             Confirmed.Size = new Size(127, 52);
@@ -84,7 +84,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1084, 872);
+            ClientSize = new Size(896, 535);
             Controls.Add(gridBoard);
             Controls.Add(Confirmed);
             Controls.Add(button1);
