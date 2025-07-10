@@ -205,8 +205,8 @@ namespace OOProjectBasedLeaning
 
         private void namehenkou_Click(object sender, EventArgs e)
         {
-            if(selectedEmployee == null)
-                {
+            if (selectedEmployee == null)
+            {
                 MessageBox.Show("ユーザー名を変更する従業員を選択してください。");
                 return;
             }
@@ -233,6 +233,11 @@ namespace OOProjectBasedLeaning
             {
                 MessageBox.Show("ユーザー名の変更はキャンセルされました。");
             }
+        }
+
+        private void label_ChooseWork_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

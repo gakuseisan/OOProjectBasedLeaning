@@ -75,7 +75,7 @@
             // labelClock
             // 
             labelClock.AutoSize = true;
-            labelClock.Location = new Point(581, 15);
+            labelClock.Location = new Point(579, 19);
             labelClock.Name = "labelClock";
             labelClock.Size = new Size(102, 25);
             labelClock.TabIndex = 3;
@@ -84,7 +84,7 @@
             // label_User
             // 
             label_User.AutoSize = true;
-            label_User.Location = new Point(581, 60);
+            label_User.Location = new Point(582, 60);
             label_User.Name = "label_User";
             label_User.Size = new Size(207, 25);
             label_User.TabIndex = 4;
@@ -93,7 +93,7 @@
             // label_AbsTime
             // 
             label_AbsTime.AutoSize = true;
-            label_AbsTime.Location = new Point(581, 352);
+            label_AbsTime.Location = new Point(582, 297);
             label_AbsTime.Name = "label_AbsTime";
             label_AbsTime.Size = new Size(102, 25);
             label_AbsTime.TabIndex = 6;
@@ -121,7 +121,7 @@
             // _NowTime
             // 
             _NowTime.AutoSize = true;
-            _NowTime.Location = new Point(824, 352);
+            _NowTime.Location = new Point(824, 297);
             _NowTime.Name = "_NowTime";
             _NowTime.Size = new Size(102, 25);
             _NowTime.TabIndex = 8;
@@ -131,7 +131,7 @@
             // RestTime
             // 
             RestTime.AutoSize = true;
-            RestTime.Location = new Point(579, 297);
+            RestTime.Location = new Point(582, 248);
             RestTime.Name = "RestTime";
             RestTime.Size = new Size(138, 25);
             RestTime.TabIndex = 6;
@@ -140,7 +140,7 @@
             // label_NowRest
             // 
             label_NowRest.AutoSize = true;
-            label_NowRest.Location = new Point(824, 297);
+            label_NowRest.Location = new Point(824, 248);
             label_NowRest.Name = "label_NowRest";
             label_NowRest.Size = new Size(138, 25);
             label_NowRest.TabIndex = 8;
@@ -149,7 +149,7 @@
             // label_leaveTime
             // 
             label_leaveTime.AutoSize = true;
-            label_leaveTime.Location = new Point(581, 248);
+            label_leaveTime.Location = new Point(582, 203);
             label_leaveTime.Name = "label_leaveTime";
             label_leaveTime.Size = new Size(102, 25);
             label_leaveTime.TabIndex = 6;
@@ -158,7 +158,7 @@
             // label_leaveWorkDisplay
             // 
             label_leaveWorkDisplay.AutoSize = true;
-            label_leaveWorkDisplay.Location = new Point(824, 248);
+            label_leaveWorkDisplay.Location = new Point(824, 203);
             label_leaveWorkDisplay.Name = "label_leaveWorkDisplay";
             label_leaveWorkDisplay.Size = new Size(102, 25);
             label_leaveWorkDisplay.TabIndex = 8;
@@ -167,7 +167,7 @@
             // kTime
             // 
             kTime.AutoSize = true;
-            kTime.Location = new Point(581, 192);
+            kTime.Location = new Point(581, 156);
             kTime.Name = "kTime";
             kTime.Size = new Size(102, 25);
             kTime.TabIndex = 6;
@@ -176,7 +176,7 @@
             // _atWorkDisplay
             // 
             _atWorkDisplay.AutoSize = true;
-            _atWorkDisplay.Location = new Point(824, 192);
+            _atWorkDisplay.Location = new Point(824, 156);
             _atWorkDisplay.Name = "_atWorkDisplay";
             _atWorkDisplay.Size = new Size(102, 25);
             _atWorkDisplay.TabIndex = 8;
@@ -185,11 +185,12 @@
             // label_ChooseWork
             // 
             label_ChooseWork.AutoSize = true;
-            label_ChooseWork.Location = new Point(581, 105);
+            label_ChooseWork.Location = new Point(582, 105);
             label_ChooseWork.Name = "label_ChooseWork";
             label_ChooseWork.Size = new Size(102, 25);
             label_ChooseWork.TabIndex = 5;
             label_ChooseWork.Text = "勤務状態：";
+            label_ChooseWork.Click += label_ChooseWork_Click;
             // 
             // _NowChooseWork
             // 
@@ -243,7 +244,7 @@
             // labelPendingAction
             // 
             labelPendingAction.AutoSize = true;
-            labelPendingAction.Location = new Point(824, 147);
+            labelPendingAction.Location = new Point(582, 372);
             labelPendingAction.Margin = new Padding(4, 0, 4, 0);
             labelPendingAction.Name = "labelPendingAction";
             labelPendingAction.Size = new Size(135, 25);
