@@ -60,10 +60,11 @@ namespace OOProjectBasedLeaning
 
         private int GetNextEmployeeId()
         {
-            var all = homeForm.GetEmployees();
-            if (all.Count == 0) return 10000;
+            var all = homeForm.GetEmployees().Concat(createdEmployees);
+            if (!all.Any()) return 10000;
             return all.Max(emp => emp.Id) + 1;
         }
+
 
         private EmployeeModel CreateEmployee()
         {
