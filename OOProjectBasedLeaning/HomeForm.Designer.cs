@@ -64,10 +64,13 @@
             button_atWork.Margin = new Padding(2, 2, 2, 2);
             labelPendingAction = new Label();
             listBoxEmployees = new ListBox();
+            labelPendingAction = new Label();
             SuspendLayout();
             // 
             // button_atWork
             //
+            button_atWork.Location = new Point(308, 158);
+            button_atWork.Margin = new Padding(2);
             button_atWork.Name = "button_atWork";
             button_atWork.Size = new Size(42, 30);
             button_atWork.TabIndex = 1;
@@ -78,7 +81,7 @@
             // button_leaveWork
             // 
             button_leaveWork.Location = new Point(360, 158);
-            button_leaveWork.Margin = new Padding(2, 2, 2, 2);
+            button_leaveWork.Margin = new Padding(2);
             button_leaveWork.Name = "button_leaveWork";
             button_leaveWork.Size = new Size(42, 30);
             button_leaveWork.TabIndex = 2;
