@@ -49,14 +49,14 @@
             button_Delete = new Button();
             listBoxEmployees = new ListBox();
             labelPendingAction = new Label();
+            namehenkou = new Button();
             SuspendLayout();
             // 
             // button_atWork
             // 
-            button_atWork.Location = new Point(405, 261);
-            button_atWork.Margin = new Padding(2);
+            button_atWork.Location = new Point(579, 435);
             button_atWork.Name = "button_atWork";
-            button_atWork.Size = new Size(60, 30);
+            button_atWork.Size = new Size(86, 50);
             button_atWork.TabIndex = 1;
             button_atWork.Text = "出勤";
             button_atWork.UseVisualStyleBackColor = true;
@@ -64,10 +64,9 @@
             // 
             // button_leaveWork
             // 
-            button_leaveWork.Location = new Point(483, 261);
-            button_leaveWork.Margin = new Padding(2);
+            button_leaveWork.Location = new Point(671, 436);
             button_leaveWork.Name = "button_leaveWork";
-            button_leaveWork.Size = new Size(60, 30);
+            button_leaveWork.Size = new Size(86, 50);
             button_leaveWork.TabIndex = 2;
             button_leaveWork.Text = "退勤";
             button_leaveWork.UseVisualStyleBackColor = true;
@@ -76,39 +75,35 @@
             // labelClock
             // 
             labelClock.AutoSize = true;
-            labelClock.Location = new Point(407, 9);
-            labelClock.Margin = new Padding(2, 0, 2, 0);
+            labelClock.Location = new Point(581, 15);
             labelClock.Name = "labelClock";
-            labelClock.Size = new Size(67, 15);
+            labelClock.Size = new Size(102, 25);
             labelClock.TabIndex = 3;
             labelClock.Text = "＊時刻表示";
             // 
             // label_User
             // 
             label_User.AutoSize = true;
-            label_User.Location = new Point(407, 36);
-            label_User.Margin = new Padding(2, 0, 2, 0);
+            label_User.Location = new Point(581, 60);
             label_User.Name = "label_User";
-            label_User.Size = new Size(137, 15);
+            label_User.Size = new Size(207, 25);
             label_User.TabIndex = 4;
             label_User.Text = "現在選択中のユーザー名：";
             // 
             // label_AbsTime
             // 
             label_AbsTime.AutoSize = true;
-            label_AbsTime.Location = new Point(407, 211);
-            label_AbsTime.Margin = new Padding(2, 0, 2, 0);
+            label_AbsTime.Location = new Point(581, 352);
             label_AbsTime.Name = "label_AbsTime";
-            label_AbsTime.Size = new Size(67, 15);
+            label_AbsTime.Size = new Size(102, 25);
             label_AbsTime.TabIndex = 6;
             label_AbsTime.Text = "確定時刻：";
             // 
             // button_rest
             // 
-            button_rest.Location = new Point(566, 261);
-            button_rest.Margin = new Padding(2);
+            button_rest.Location = new Point(763, 435);
             button_rest.Name = "button_rest";
-            button_rest.Size = new Size(78, 30);
+            button_rest.Size = new Size(111, 50);
             button_rest.TabIndex = 7;
             button_rest.Text = "休憩切替";
             button_rest.UseVisualStyleBackColor = true;
@@ -117,20 +112,18 @@
             // label_NowUser
             // 
             label_NowUser.AutoSize = true;
-            label_NowUser.Location = new Point(577, 36);
-            label_NowUser.Margin = new Padding(2, 0, 2, 0);
+            label_NowUser.Location = new Point(824, 60);
             label_NowUser.Name = "label_NowUser";
-            label_NowUser.Size = new Size(67, 15);
+            label_NowUser.Size = new Size(102, 25);
             label_NowUser.TabIndex = 8;
             label_NowUser.Text = "＊ユーザー名";
             // 
             // _NowTime
             // 
             _NowTime.AutoSize = true;
-            _NowTime.Location = new Point(577, 211);
-            _NowTime.Margin = new Padding(2, 0, 2, 0);
+            _NowTime.Location = new Point(824, 352);
             _NowTime.Name = "_NowTime";
-            _NowTime.Size = new Size(67, 15);
+            _NowTime.Size = new Size(102, 25);
             _NowTime.TabIndex = 8;
             _NowTime.Text = "＊確定時刻";
             _NowTime.Click += _NowTime_Click;
@@ -138,89 +131,80 @@
             // RestTime
             // 
             RestTime.AutoSize = true;
-            RestTime.Location = new Point(405, 178);
-            RestTime.Margin = new Padding(2, 0, 2, 0);
+            RestTime.Location = new Point(579, 297);
             RestTime.Name = "RestTime";
-            RestTime.Size = new Size(91, 15);
+            RestTime.Size = new Size(138, 25);
             RestTime.TabIndex = 6;
             RestTime.Text = "合計休憩時間：";
             // 
             // label_NowRest
             // 
             label_NowRest.AutoSize = true;
-            label_NowRest.Location = new Point(577, 178);
-            label_NowRest.Margin = new Padding(2, 0, 2, 0);
+            label_NowRest.Location = new Point(824, 297);
             label_NowRest.Name = "label_NowRest";
-            label_NowRest.Size = new Size(91, 15);
+            label_NowRest.Size = new Size(138, 25);
             label_NowRest.TabIndex = 8;
             label_NowRest.Text = "＊合計休憩時間";
             // 
             // label_leaveTime
             // 
             label_leaveTime.AutoSize = true;
-            label_leaveTime.Location = new Point(407, 149);
-            label_leaveTime.Margin = new Padding(2, 0, 2, 0);
+            label_leaveTime.Location = new Point(581, 248);
             label_leaveTime.Name = "label_leaveTime";
-            label_leaveTime.Size = new Size(67, 15);
+            label_leaveTime.Size = new Size(102, 25);
             label_leaveTime.TabIndex = 6;
             label_leaveTime.Text = "退勤時刻：";
             // 
             // label_leaveWorkDisplay
             // 
             label_leaveWorkDisplay.AutoSize = true;
-            label_leaveWorkDisplay.Location = new Point(577, 149);
-            label_leaveWorkDisplay.Margin = new Padding(2, 0, 2, 0);
+            label_leaveWorkDisplay.Location = new Point(824, 248);
             label_leaveWorkDisplay.Name = "label_leaveWorkDisplay";
-            label_leaveWorkDisplay.Size = new Size(67, 15);
+            label_leaveWorkDisplay.Size = new Size(102, 25);
             label_leaveWorkDisplay.TabIndex = 8;
             label_leaveWorkDisplay.Text = "＊退勤時刻";
             // 
             // kTime
             // 
             kTime.AutoSize = true;
-            kTime.Location = new Point(407, 115);
-            kTime.Margin = new Padding(2, 0, 2, 0);
+            kTime.Location = new Point(581, 192);
             kTime.Name = "kTime";
-            kTime.Size = new Size(67, 15);
+            kTime.Size = new Size(102, 25);
             kTime.TabIndex = 6;
             kTime.Text = "出勤時刻：";
             // 
             // _atWorkDisplay
             // 
             _atWorkDisplay.AutoSize = true;
-            _atWorkDisplay.Location = new Point(577, 115);
-            _atWorkDisplay.Margin = new Padding(2, 0, 2, 0);
+            _atWorkDisplay.Location = new Point(824, 192);
             _atWorkDisplay.Name = "_atWorkDisplay";
-            _atWorkDisplay.Size = new Size(67, 15);
+            _atWorkDisplay.Size = new Size(102, 25);
             _atWorkDisplay.TabIndex = 8;
             _atWorkDisplay.Text = "＊出勤時刻";
             // 
             // label_ChooseWork
             // 
             label_ChooseWork.AutoSize = true;
-            label_ChooseWork.Location = new Point(407, 63);
-            label_ChooseWork.Margin = new Padding(2, 0, 2, 0);
+            label_ChooseWork.Location = new Point(581, 105);
             label_ChooseWork.Name = "label_ChooseWork";
-            label_ChooseWork.Size = new Size(67, 15);
+            label_ChooseWork.Size = new Size(102, 25);
             label_ChooseWork.TabIndex = 5;
             label_ChooseWork.Text = "勤務状態：";
             // 
             // _NowChooseWork
             // 
             _NowChooseWork.AutoSize = true;
-            _NowChooseWork.Location = new Point(577, 63);
-            _NowChooseWork.Margin = new Padding(2, 0, 2, 0);
+            _NowChooseWork.Location = new Point(824, 105);
             _NowChooseWork.Name = "_NowChooseWork";
-            _NowChooseWork.Size = new Size(67, 15);
+            _NowChooseWork.Size = new Size(102, 25);
             _NowChooseWork.TabIndex = 8;
             _NowChooseWork.Text = "＊勤務状態";
             // 
             // button_comit
             // 
-            button_comit.Location = new Point(668, 261);
-            button_comit.Margin = new Padding(2);
+            button_comit.Location = new Point(880, 436);
             button_comit.Name = "button_comit";
-            button_comit.Size = new Size(60, 30);
+            button_comit.Size = new Size(86, 50);
             button_comit.TabIndex = 2;
             button_comit.Text = "確定";
             button_comit.UseVisualStyleBackColor = true;
@@ -228,18 +212,18 @@
             // 
             // listview_Log
             // 
-            listview_Log.Location = new Point(405, 295);
-            listview_Log.Margin = new Padding(2);
+            listview_Log.Location = new Point(579, 492);
             listview_Log.Name = "listview_Log";
-            listview_Log.Size = new Size(411, 115);
+            listview_Log.Size = new Size(585, 189);
             listview_Log.TabIndex = 9;
             listview_Log.UseCompatibleStateImageBehavior = false;
             // 
             // button_Delete
             // 
-            button_Delete.Location = new Point(746, 260);
+            button_Delete.Location = new Point(973, 436);
+            button_Delete.Margin = new Padding(4, 5, 4, 5);
             button_Delete.Name = "button_Delete";
-            button_Delete.Size = new Size(60, 30);
+            button_Delete.Size = new Size(86, 50);
             button_Delete.TabIndex = 10;
             button_Delete.Text = "削除";
             button_Delete.UseVisualStyleBackColor = true;
@@ -247,28 +231,41 @@
             // listBoxEmployees
             // 
             listBoxEmployees.FormattingEnabled = true;
-            listBoxEmployees.ItemHeight = 15;
-            listBoxEmployees.Location = new Point(1, 1);
+            listBoxEmployees.ItemHeight = 25;
+            listBoxEmployees.Location = new Point(1, 2);
+            listBoxEmployees.Margin = new Padding(4, 5, 4, 5);
             listBoxEmployees.Name = "listBoxEmployees";
-            listBoxEmployees.Size = new Size(399, 409);
+            listBoxEmployees.Size = new Size(568, 679);
             listBoxEmployees.TabIndex = 11;
             listBoxEmployees.SelectedIndexChanged += listBoxEmployees_SelectedIndexChanged;
             // 
             // labelPendingAction
             // 
             labelPendingAction.AutoSize = true;
-            labelPendingAction.Location = new Point(577, 88);
+            labelPendingAction.Location = new Point(824, 147);
+            labelPendingAction.Margin = new Padding(4, 0, 4, 0);
             labelPendingAction.Name = "labelPendingAction";
-            labelPendingAction.Size = new Size(89, 15);
+            labelPendingAction.Size = new Size(135, 25);
             labelPendingAction.TabIndex = 10;
             labelPendingAction.Text = "＊選択中の状態";
             labelPendingAction.Click += labelPendingAction_Click;
             // 
+            // namehenkou
+            // 
+            namehenkou.Location = new Point(1067, 436);
+            namehenkou.Margin = new Padding(4, 5, 4, 5);
+            namehenkou.Name = "namehenkou";
+            namehenkou.Size = new Size(86, 50);
+            namehenkou.TabIndex = 12;
+            namehenkou.Text = "お名前";
+            namehenkou.UseVisualStyleBackColor = true;
+            // 
             // HomeForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(827, 407);
+            ClientSize = new Size(1181, 678);
+            Controls.Add(namehenkou);
             Controls.Add(button_Delete);
             Controls.Add(labelPendingAction);
             Controls.Add(listview_Log);
@@ -290,7 +287,6 @@
             Controls.Add(button_leaveWork);
             Controls.Add(button_atWork);
             Controls.Add(listBoxEmployees);
-            Margin = new Padding(2);
             Name = "HomeForm";
             Text = "HomeForm";
             Load += HomeForm_Load;
@@ -320,5 +316,6 @@
         private Button button_Delete;
         private Label labelPendingAction;
         private ListBox listBoxEmployees;
+        private Button namehenkou;
     }
 }
