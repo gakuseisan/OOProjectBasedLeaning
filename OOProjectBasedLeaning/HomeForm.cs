@@ -29,11 +29,7 @@ namespace OOProjectBasedLeaning
             }
         }
 
-        public List<EmployeeModel> GetEmployees()
-        {
-            return employees;
-        }
-
+        // 従業員リストを外部から取得するための公開メソッド
         public List<EmployeeModel> GetEmployees()
         {
             return employees;
@@ -53,7 +49,8 @@ namespace OOProjectBasedLeaning
 
         private void changejump_Click(object sender, EventArgs e)
         {
-            ChangeForm changeForm = new ChangeForm();
+            // ChangeForm に HomeForm のインスタンスを渡す
+            ChangeForm changeForm = new ChangeForm(this);
             changeForm.Show();
         }
     }
