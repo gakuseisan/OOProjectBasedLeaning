@@ -202,5 +202,37 @@ namespace OOProjectBasedLeaning
                 MessageBox.Show($"{deletedEmployeeName} さんを削除しました。", "削除完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+        private void namehenkou_Click(object sender, EventArgs e)
+        {
+            if(selectedEmployee == null)
+                {
+                MessageBox.Show("ユーザー名を変更する従業員を選択してください。");
+                return;
+            }
+
+            string currentName = selectedEmployee.Name;
+            string input = Microsoft.VisualBasic.Interaction.InputBox(
+                "新しいユーザー名を入力してください：",
+                "ユーザー名変更",
+                currentName);
+
+            if (!string.IsNullOrWhiteSpace(input))
+            {
+                selectedEmployee.Name = input;
+
+                // ListBox 表示更新
+                DisplayEmployees();
+
+                // 再選択して情報を更新
+                listBoxEmployees.SelectedIndex = employees.IndexOf(selectedEmployee);
+
+                MessageBox.Show("ユーザー名を変更しました。");
+            }
+            else
+            {
+                MessageBox.Show("ユーザー名の変更はキャンセルされました。");
+            }
+        }
     }
 }

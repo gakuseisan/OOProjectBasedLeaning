@@ -214,7 +214,7 @@
             // 
             listview_Log.Location = new Point(579, 492);
             listview_Log.Name = "listview_Log";
-            listview_Log.Size = new Size(585, 189);
+            listview_Log.Size = new Size(625, 189);
             listview_Log.TabIndex = 9;
             listview_Log.UseCompatibleStateImageBehavior = false;
             // 
@@ -256,16 +256,17 @@
             namehenkou.Location = new Point(1067, 436);
             namehenkou.Margin = new Padding(4, 5, 4, 5);
             namehenkou.Name = "namehenkou";
-            namehenkou.Size = new Size(86, 50);
+            namehenkou.Size = new Size(137, 50);
             namehenkou.TabIndex = 12;
-            namehenkou.Text = "お名前";
+            namehenkou.Text = "ユーザー名変更";
             namehenkou.UseVisualStyleBackColor = true;
+            namehenkou.Click += namehenkou_Click;
             // 
             // HomeForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1181, 678);
+            ClientSize = new Size(1257, 678);
             Controls.Add(namehenkou);
             Controls.Add(button_Delete);
             Controls.Add(labelPendingAction);
