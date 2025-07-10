@@ -21,7 +21,7 @@ namespace OOProjectBasedLeaning
             InitializeComponent();
         }
 
-        // ListBoxの選択変更イベント
+        // ListBoxの選択変更イベント 
         private void listBoxEmployees_SelectedIndexChanged(object sender, EventArgs e)
         {
             int idx = listBoxEmployees.SelectedIndex;
@@ -69,7 +69,7 @@ namespace OOProjectBasedLeaning
 
         private void HomeForm_Load(object sender, EventArgs e)
         {
-            // Company と TimeTracker を初期化
+            // Company と TimeTracker を初期化 
             company = new CompanyModel("MyCompany");
             timeTracker = new TimeTrackerModel(company);
 
@@ -85,10 +85,10 @@ namespace OOProjectBasedLeaning
 
         private void _NowTime_Click(object sender, EventArgs e)
         {
-            // 不要なら削除
+            // 不要なら削除 
         }
 
-        // 確定ボタン押下で保留中の操作を実行
+        // 確定ボタン押下で保留中の操作を実行 
         private void button_comit_Click(object sender, EventArgs e)
         {
             if (selectedEmployee == null)
@@ -103,11 +103,13 @@ namespace OOProjectBasedLeaning
                 {
                     case PendingAction.ClockIn:
                         company.ClockIn(selectedEmployee);
+                        _atWorkDisplay.Text = DateTime.Now.ToString("HH:mm:ss");  // 出勤時刻を表示 
                         MessageBox.Show($"{selectedEmployee.Name} さんが出勤しました。");
                         break;
 
                     case PendingAction.ClockOut:
                         company.ClockOut(selectedEmployee);
+                        label_leaveWorkDisplay.Text = DateTime.Now.ToString("HH:mm:ss");  // 退勤時刻を表示 
                         MessageBox.Show($"{selectedEmployee.Name} さんが退勤しました。");
                         break;
 
@@ -123,25 +125,28 @@ namespace OOProjectBasedLeaning
             finally
             {
                 pendingAction = PendingAction.none;
+                labelPendingAction.Text = "";  // 保留状態ラベルリセット
                 UpdateStatusDisplay(selectedEmployee);
             }
         }
 
-        // 出勤ボタン
+        // 出勤ボタン 
         private void button_atWork_Click(object sender, EventArgs e)
         {
             pendingAction = PendingAction.ClockIn;
+            labelPendingAction.Text = "出勤処理が選択されました";
             MessageBox.Show("出勤処理を確定してください。");
         }
 
-        // 退勤ボタン
+        // 退勤ボタン 
         private void button_leaveWork_Click(object sender, EventArgs e)
         {
             pendingAction = PendingAction.ClockOut;
+            labelPendingAction.Text = "退勤処理が選択されました";
             MessageBox.Show("退勤処理を確定してください。");
         }
 
-        // 休憩ボタン（未実装のためメッセージ表示のみ）
+        // 休憩ボタン（未実装のためメッセージ表示のみ） 
         private void button_rest_Click(object sender, EventArgs e)
         {
             MessageBox.Show("休憩機能は現在未実装です。");

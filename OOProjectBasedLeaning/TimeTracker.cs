@@ -1,61 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OOProjectBasedLeaning
 {
-
     public interface TimeTracker
     {
-
-        /// <summary>
-        /// 出勤の時間を記録する。
-        /// </summary>
-        /// <param name="employeeId">従業員のID</param>
-        /// <exception cref="InvalidOperationException">従業員がすでに仕事中の場合</exception>"
         void PunchIn(int employeeId);
-
-        /// <summary>
-        /// 退勤の時間を記録する。
-        /// </summary>
-        /// <param name="employeeId">従業員のID</param>
-        /// <exception cref="InvalidOperationException">従業員が仕事中でない場合</exception>""
         void PunchOut(int employeeId);
-
-        /// <summary>
-        /// 仕事中かどうかを判定する。
-        /// </summary>
-        /// <param name="employeeId"></param>
-        /// <returns>仕事中の場合 true</returns>
         bool IsAtWork(int employeeId);
-
     }
 
     public class TimeTrackerModel : TimeTracker
     {
-
         private Company company = NullCompany.Instance;
 
-        private Dictionary<DateTime, Dictionary<int, DateTime>> timestamp4PunchIn = new Dictionary<DateTime, Dictionary<int, DateTime>>();
-        private Dictionary<DateTime, Dictionary<int, DateTime>> timestamp4PunchOut = new Dictionary<DateTime, Dictionary<int, DateTime>>();
+        private Dictionary<DateTime, Dictionary<int, DateTime>> timestamp4PunchIn = new();
+        private Dictionary<DateTime, Dictionary<int, DateTime>> timestamp4PunchOut = new();
 
-        private Mode mode = Mode.PunchIn;
-
-        private enum Mode
-        {
-            PunchIn, // default
-            PunchOut
-        };
+        private Dictionary<int, bool> atWorkStatus = new(); // ★ 状態を保持する辞書
 
         public TimeTrackerModel(Company company)
         {
             this.company = company.AddTimeTracker(this);
         }
 
-        // キーの存在をチェックして初期化するメソッドを追加（修正箇所）
         private void EnsureTodayInitialized()
         {
             if (!timestamp4PunchIn.ContainsKey(DateTime.Today))
@@ -70,81 +38,74 @@ namespace OOProjectBasedLeaning
 
         public void PunchIn(int employeeId)
         {
-            EnsureTodayInitialized(); // 修正：初期化を呼ぶ
+            EnsureTodayInitialized();
 
             if (IsAtWork(employeeId))
             {
-                throw new InvalidOperationException("Employee is already at work.");
+                throw new InvalidOperationException("すでに出勤しています。");
             }
 
-            // 修正：Addだと同じ日に複数の打刻があると例外になるので辞書に直接代入
             timestamp4PunchIn[DateTime.Today][employeeId] = DateTime.Now;
+            atWorkStatus[employeeId] = true;
         }
 
         public void PunchOut(int employeeId)
         {
-            EnsureTodayInitialized(); // 修正：初期化を呼ぶ
+            EnsureTodayInitialized();
 
             if (!IsAtWork(employeeId))
             {
-                throw new InvalidOperationException("Employee is not at work.");
+                throw new InvalidOperationException("現在出勤していません。");
             }
 
-            // 修正：Addをやめて直接代入に変更
             timestamp4PunchOut[DateTime.Today][employeeId] = DateTime.Now;
-        }
-
-        private Dictionary<int, DateTime> CreateTimestamp(int employeeId)
-        {
-            Dictionary<int, DateTime> timestamp = new Dictionary<int, DateTime>();
-            timestamp.Add(employeeId, DateTime.Now);
-
-            return timestamp;
+            atWorkStatus[employeeId] = false;
         }
 
         public bool IsAtWork(int employeeId)
         {
-            // 修正：キーが存在するか確認してからアクセスするように変更
-            if (!timestamp4PunchIn.ContainsKey(DateTime.Today))
-                return false;
-            if (!timestamp4PunchOut.ContainsKey(DateTime.Today))
-                return timestamp4PunchIn[DateTime.Today].ContainsKey(employeeId);
-
-            return timestamp4PunchIn[DateTime.Today].ContainsKey(employeeId)
-                && !timestamp4PunchOut[DateTime.Today].ContainsKey(employeeId);
+            return atWorkStatus.ContainsKey(employeeId) && atWorkStatus[employeeId];
         }
 
+        // 出勤時刻を取得（オプション）
+        public DateTime? GetPunchInTime(int employeeId)
+        {
+            if (timestamp4PunchIn.TryGetValue(DateTime.Today, out var dayRecords))
+            {
+                if (dayRecords.TryGetValue(employeeId, out var time))
+                {
+                    return time;
+                }
+            }
+            return null;
+        }
+
+        // 退勤時刻を取得（オプション）
+        public DateTime? GetPunchOutTime(int employeeId)
+        {
+            if (timestamp4PunchOut.TryGetValue(DateTime.Today, out var dayRecords))
+            {
+                if (dayRecords.TryGetValue(employeeId, out var time))
+                {
+                    return time;
+                }
+            }
+            return null;
+        }
     }
 
     public class NullTimeTracker : TimeTracker, NullObject
     {
+        private static readonly NullTimeTracker instance = new();
 
-        private static NullTimeTracker instance = new NullTimeTracker();
+        private NullTimeTracker() { }
 
-        private NullTimeTracker()
-        {
+        public static TimeTracker Instance => instance;
 
-        }
+        public void PunchIn(int employeeId) { }
 
-        public static TimeTracker Instance { get { return instance; } }
+        public void PunchOut(int employeeId) { }
 
-        public void PunchIn(int employeeId)
-        {
-
-        }
-
-        public void PunchOut(int employeeId)
-        {
-
-        }
-
-        public bool IsAtWork(int employeeId)
-        {
-
-            return false;
-
-        }
-
+        public bool IsAtWork(int employeeId) => false;
     }
-
 }
