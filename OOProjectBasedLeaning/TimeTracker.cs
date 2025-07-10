@@ -37,26 +37,11 @@ namespace OOProjectBasedLeaning
     public class TimeTrackerModel : TimeTracker
     {
 
-        /// <summary>
-        /// Represents the company associated with the current context.
-        /// </summary>
-        /// <remarks>This field is initialized to a default instance of <see cref="NullCompany"/> to
-        /// ensure         a non-null value. Use this field to access or modify the company information as
-        /// needed.</remarks>
         private Company company = NullCompany.Instance;
-        /// <summary>
-        /// <DateTime.Today, <Employee.Id, DateTime.Now>>
-        /// </summary>
+
         private Dictionary<DateTime, Dictionary<int, DateTime>> timestamp4PunchIn = new Dictionary<DateTime, Dictionary<int, DateTime>>();
-        /// <summary>
-        /// <DateTime.Today, <Employee.Id, DateTime.Now>>
-        /// </summary>
         private Dictionary<DateTime, Dictionary<int, DateTime>> timestamp4PunchOut = new Dictionary<DateTime, Dictionary<int, DateTime>>();
-        /// <summary>
-        /// Represents the current operational mode of the system.
-        /// </summary>
-        /// <remarks>The mode determines the behavior of the system, such as whether it operates in "Punch
-        /// In" mode or other modes.</remarks>
+
         private Mode mode = Mode.PunchIn;
 
         private enum Mode
@@ -67,62 +52,66 @@ namespace OOProjectBasedLeaning
 
         public TimeTrackerModel(Company company)
         {
-
             this.company = company.AddTimeTracker(this);
+        }
 
+        // キーの存在をチェックして初期化するメソッドを追加（修正箇所）
+        private void EnsureTodayInitialized()
+        {
+            if (!timestamp4PunchIn.ContainsKey(DateTime.Today))
+            {
+                timestamp4PunchIn[DateTime.Today] = new Dictionary<int, DateTime>();
+            }
+            if (!timestamp4PunchOut.ContainsKey(DateTime.Today))
+            {
+                timestamp4PunchOut[DateTime.Today] = new Dictionary<int, DateTime>();
+            }
         }
 
         public void PunchIn(int employeeId)
         {
+            EnsureTodayInitialized(); // 修正：初期化を呼ぶ
 
             if (IsAtWork(employeeId))
             {
-
-                // TODO
                 throw new InvalidOperationException("Employee is already at work.");
-
             }
 
-            timestamp4PunchIn.Add(DateTime.Today, CreateTimestamp(employeeId));
-
+            // 修正：Addだと同じ日に複数の打刻があると例外になるので辞書に直接代入
+            timestamp4PunchIn[DateTime.Today][employeeId] = DateTime.Now;
         }
 
         public void PunchOut(int employeeId)
         {
+            EnsureTodayInitialized(); // 修正：初期化を呼ぶ
 
             if (!IsAtWork(employeeId))
             {
-
-                // TODO
                 throw new InvalidOperationException("Employee is not at work.");
-
             }
 
-            timestamp4PunchOut.Add(DateTime.Today, CreateTimestamp(employeeId));
-
+            // 修正：Addをやめて直接代入に変更
+            timestamp4PunchOut[DateTime.Today][employeeId] = DateTime.Now;
         }
 
-        /// <summary>
-        /// 打刻用の時間を生成します。
-        /// </summary>
-        /// <param name="employeeId">従業員のID</param>
-        /// <returns>生成された Dictionary<int, DateTime> のオブジェクト</returns>
         private Dictionary<int, DateTime> CreateTimestamp(int employeeId)
         {
-
             Dictionary<int, DateTime> timestamp = new Dictionary<int, DateTime>();
             timestamp.Add(employeeId, DateTime.Now);
 
             return timestamp;
-
         }
 
         public bool IsAtWork(int employeeId)
         {
+            // 修正：キーが存在するか確認してからアクセスするように変更
+            if (!timestamp4PunchIn.ContainsKey(DateTime.Today))
+                return false;
+            if (!timestamp4PunchOut.ContainsKey(DateTime.Today))
+                return timestamp4PunchIn[DateTime.Today].ContainsKey(employeeId);
 
             return timestamp4PunchIn[DateTime.Today].ContainsKey(employeeId)
                 && !timestamp4PunchOut[DateTime.Today].ContainsKey(employeeId);
-
         }
 
     }

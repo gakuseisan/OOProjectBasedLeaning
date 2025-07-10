@@ -28,9 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            listBoxEmployees = new ListView();
             button_atWork = new Button();
-            _leaveWork = new Button();
+            button_leaveWork = new Button();
             labelClock = new Label();
             label_User = new Label();
             _Work = new Label();
@@ -49,33 +48,29 @@
             _NowChooseWork = new Label();
             button_comit = new Button();
             listview_Log = new ListView();
+            labelPendingAction = new Label();
+            listBoxEmployees = new ListBox();
             SuspendLayout();
-            // 
-            // listBoxEmployees
-            // 
-            listBoxEmployees.Location = new Point(12, 12);
-            listBoxEmployees.Name = "listBoxEmployees";
-            listBoxEmployees.Size = new Size(411, 426);
-            listBoxEmployees.TabIndex = 0;
-            listBoxEmployees.UseCompatibleStateImageBehavior = false;
             // 
             // button_atWork
             // 
-            button_atWork.Location = new Point(440, 264);
+            button_atWork.Location = new Point(443, 281);
             button_atWork.Name = "button_atWork";
             button_atWork.Size = new Size(60, 34);
             button_atWork.TabIndex = 1;
             button_atWork.Text = "出勤";
             button_atWork.UseVisualStyleBackColor = true;
+            button_atWork.Click += button_atWork_Click;
             // 
-            // _leaveWork
+            // button_leaveWork
             // 
-            _leaveWork.Location = new Point(506, 264);
-            _leaveWork.Name = "_leaveWork";
-            _leaveWork.Size = new Size(60, 34);
-            _leaveWork.TabIndex = 2;
-            _leaveWork.Text = "退勤";
-            _leaveWork.UseVisualStyleBackColor = true;
+            button_leaveWork.Location = new Point(509, 281);
+            button_leaveWork.Name = "button_leaveWork";
+            button_leaveWork.Size = new Size(60, 34);
+            button_leaveWork.TabIndex = 2;
+            button_leaveWork.Text = "退勤";
+            button_leaveWork.UseVisualStyleBackColor = true;
+            button_leaveWork.Click += button_leaveWork_Click;
             // 
             // labelClock
             // 
@@ -115,12 +110,13 @@
             // 
             // button_rest
             // 
-            button_rest.Location = new Point(572, 264);
+            button_rest.Location = new Point(575, 281);
             button_rest.Name = "button_rest";
             button_rest.Size = new Size(112, 34);
             button_rest.TabIndex = 7;
             button_rest.Text = "休憩切替";
             button_rest.UseVisualStyleBackColor = true;
+            button_rest.Click += button_rest_Click;
             // 
             // label_NowUser
             // 
@@ -148,6 +144,7 @@
             _NowTime.Size = new Size(102, 25);
             _NowTime.TabIndex = 8;
             _NowTime.Text = "＊確定時刻";
+            _NowTime.Click += _NowTime_Click;
             // 
             // RestTime
             // 
@@ -223,12 +220,13 @@
             // 
             // button_comit
             // 
-            button_comit.Location = new Point(690, 264);
+            button_comit.Location = new Point(693, 281);
             button_comit.Name = "button_comit";
             button_comit.Size = new Size(60, 34);
             button_comit.TabIndex = 2;
             button_comit.Text = "確定";
             button_comit.UseVisualStyleBackColor = true;
+            button_comit.Click += button_comit_Click;
             // 
             // listview_Log
             // 
@@ -238,11 +236,33 @@
             listview_Log.TabIndex = 9;
             listview_Log.UseCompatibleStateImageBehavior = false;
             // 
+            // labelPendingAction
+            // 
+            labelPendingAction.AutoSize = true;
+            labelPendingAction.Location = new Point(454, 247);
+            labelPendingAction.Name = "labelPendingAction";
+            labelPendingAction.Size = new Size(135, 25);
+            labelPendingAction.TabIndex = 10;
+            labelPendingAction.Text = "＊選択中の状態";
+            // 
+            // listBoxEmployees
+            // 
+            listBoxEmployees.FormattingEnabled = true;
+            listBoxEmployees.ItemHeight = 25;
+            listBoxEmployees.Location = new Point(25, 12);
+            listBoxEmployees.Name = "listBoxEmployees";
+            listBoxEmployees.Size = new Size(399, 404);
+            listBoxEmployees.TabIndex = 11;
+            listBoxEmployees.SelectedIndexChanged += listBoxEmployees_SelectedIndexChanged;
+
+            // 
             // HomeForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(listBoxEmployees);
+            Controls.Add(labelPendingAction);
             Controls.Add(listview_Log);
             Controls.Add(_atWorkDisplay);
             Controls.Add(label_leaveWorkDisplay);
@@ -261,9 +281,8 @@
             Controls.Add(label_User);
             Controls.Add(labelClock);
             Controls.Add(button_comit);
-            Controls.Add(_leaveWork);
+            Controls.Add(button_leaveWork);
             Controls.Add(button_atWork);
-            Controls.Add(listBoxEmployees);
             Name = "HomeForm";
             Text = "HomeForm";
             Load += HomeForm_Load;
@@ -272,10 +291,8 @@
         }
 
         #endregion
-
-        private ListView listBoxEmployees;
         private Button button_atWork;
-        private Button _leaveWork;
+        private Button button_leaveWork;
         private Label labelClock;
         private Label label_User;
         private Label _Work;
@@ -294,6 +311,7 @@
         private Label _NowChooseWork;
         private Button button_comit;
         private ListView listview_Log;
-        
+        private Label labelPendingAction;
+        private ListBox listBoxEmployees;
     }
 }
