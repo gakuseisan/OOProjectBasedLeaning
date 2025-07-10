@@ -13,6 +13,16 @@ namespace OOProjectBasedLeaning
         {
             InitializeComponent();
         }
+        public void UpdateEmployeeName(int employeeId, string newName)
+        {
+            var employeeToUpdate = employees.FirstOrDefault(emp => emp.Id == employeeId);
+            if (employeeToUpdate != null)
+            {
+                employeeToUpdate.Name = newName;
+                // HomeFormのリスト表示を更新
+                DisplayEmployees();
+            }
+        }
 
         public void AddEmployee(EmployeeModel employee)
         {
