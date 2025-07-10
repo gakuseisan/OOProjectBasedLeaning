@@ -12,6 +12,8 @@ namespace OOProjectBasedLeaning
         private List<EmployeeModel> createdEmployees = new();
         private HomeForm homeForm;
 
+        private Panel trashBox;
+
         public EmployeeCreatorForm(HomeForm homeForm)
         {
             InitializeComponent();
@@ -31,6 +33,62 @@ namespace OOProjectBasedLeaning
 
             gridBoard.DragEnter += GridBoard_DragEnter;
             gridBoard.DragDrop += GridBoard_DragDrop;
+
+            InitializeTrashBox();
+        }
+
+        private void InitializeTrashBox()
+        {
+            trashBox = new Panel
+            {
+                Width = 100,
+                Height = 100,
+                BackColor = Color.LightGray,
+                Location = new Point(this.ClientSize.Width - 110, this.ClientSize.Height - 110),
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                BorderStyle = BorderStyle.FixedSingle,
+                AllowDrop = true
+            };
+
+            var trashLabel = new Label
+            {
+                Text = "🗑️ ゴミ箱",
+                AutoSize = false,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill
+            };
+
+            trashBox.Controls.Add(trashLabel);
+            this.Controls.Add(trashBox);
+
+            trashBox.DragEnter += TrashBox_DragEnter;
+            trashBox.DragDrop += TrashBox_DragDrop;
+            trashBox.DragLeave += (s, e) => trashBox.BackColor = Color.LightGray;
+        }
+
+        private void TrashBox_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(EmployeePanel)))
+            {
+                e.Effect = DragDropEffects.Move;
+                trashBox.BackColor = Color.Red;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void TrashBox_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetData(typeof(EmployeePanel)) is EmployeePanel panel)
+            {
+                gridBoard.Controls.Remove(panel);
+                createdEmployees.Remove(panel.EmployeeData);
+                trashBox.BackColor = Color.LightGray;
+
+                MessageBox.Show($"{panel.EmployeeData.Name} を削除しました。");
+            }
         }
 
         private void CreateGuestEvent(object sender, EventArgs e)
@@ -60,8 +118,8 @@ namespace OOProjectBasedLeaning
 
         private int GetNextEmployeeId()
         {
-            var all = homeForm.GetEmployees();
-            if (all.Count == 0) return 10000;
+            var all = homeForm.GetEmployees().Concat(createdEmployees);
+            if (!all.Any()) return 10000;
             return all.Max(emp => emp.Id) + 1;
         }
 
@@ -133,7 +191,9 @@ namespace OOProjectBasedLeaning
             homeForm.DisplayEmployees();
             createdEmployees.Clear();
 
-            MessageBox.Show("全従業員を Home に登録しました。");
+            gridBoard.Controls.Clear();
+
+            MessageBox.Show("従業員を登録しました。");
         }
 
         private void gridBoard_Paint(object sender, PaintEventArgs e) { }
