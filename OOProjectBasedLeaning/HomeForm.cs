@@ -151,5 +151,10 @@ namespace OOProjectBasedLeaning
         {
             MessageBox.Show("ãxåeã@î\ÇÕåªç›ñ¢é¿ëïÇ≈Ç∑ÅB");
         }
+
+        private void labelPendingAction_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
